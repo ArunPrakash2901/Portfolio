@@ -22,7 +22,7 @@ CONTRIBUTION_THRESHOLD = 60
 RECENCY_HALFLIFE_DAYS = 180
 
 # File extensions worth sampling actual code from (beyond README + tree).
-KEY_FILE_EXTENSIONS = (".py", ".sql", ".r", ".scala", ".java", ".ts", ".js")
+KEY_FILE_EXTENSIONS = (".py", ".sql", ".r", ".scala", ".java", ".ts", ".js", ".ipynb", ".Rmd")
 
 # Skip files matching these substrings when sampling code — boilerplate, tests,
 # and generated files add noise without signal.
@@ -69,7 +69,7 @@ AXIS_DISPLAY_MAP = {
 
 def load_state():
     if not os.path.exists(STATE_FILE):
-        return {"github_username": "YOUR_GITHUB_USERNAME", "repositories": {}}
+        return {"github_username": "ArunPrakash2901", "repositories": {}}
     with open(STATE_FILE, "r") as f:
         return json.load(f)
 
