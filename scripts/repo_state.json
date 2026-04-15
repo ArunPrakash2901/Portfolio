@@ -1,0 +1,17 @@
+{
+  "github_username": "YOUR_GITHUB_USERNAME",
+  "repositories": {
+    "dummy-project-repo": {
+      "pushed_at": "2024-01-01T00:00:00Z",
+      "scores": {
+        "analytics_eda": 30,
+        "statistical_reasoning": 90,
+        "machine_learning": 95,
+        "data_engineering": 70,
+        "cloud_infrastructure": 85,
+        "visualisation_bi": 40,
+        "communication": 60
+      }
+    }
+  }
+}

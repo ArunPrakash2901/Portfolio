@@ -1,0 +1,47 @@
+[
+  {
+    "competency": "Analytics / EDA",
+    "score": 30,
+    "contributingProjects": []
+  },
+  {
+    "competency": "Stats Reason",
+    "score": 90,
+    "contributingProjects": [
+      "dummy-project-repo"
+    ]
+  },
+  {
+    "competency": "Machine Learning",
+    "score": 95,
+    "contributingProjects": [
+      "dummy-project-repo"
+    ]
+  },
+  {
+    "competency": "Data Eng",
+    "score": 70,
+    "contributingProjects": [
+      "dummy-project-repo"
+    ]
+  },
+  {
+    "competency": "Cloud / Infra",
+    "score": 85,
+    "contributingProjects": [
+      "dummy-project-repo"
+    ]
+  },
+  {
+    "competency": "Viz / BI",
+    "score": 40,
+    "contributingProjects": []
+  },
+  {
+    "competency": "Communication",
+    "score": 60,
+    "contributingProjects": [
+      "dummy-project-repo"
+    ]
+  }
+]

@@ -1,0 +1,75 @@
+[
+  {
+    "title": "Distributed Neural Network Optimizer",
+    "slug": "projects/dummy-project",
+    "category": "Work",
+    "date": "2025-10-14T00:00:00.000Z",
+    "domain": [
+      "AI",
+      "Algorithms"
+    ],
+    "techStack": [
+      "PyTorch"
+    ],
+    "competencyScores": {
+      "analytics_eda": 30,
+      "statistical_reasoning": 90,
+      "machine_learning": 95,
+      "data_engineering": 70,
+      "cloud_infrastructure": 85,
+      "visualisation_bi": 40,
+      "communication": 60
+    },
+    "summary": "A purely computational artifact optimizing neural latency via minimal, highly focused mathematical transformations.",
+    "code": "const{Fragment:l,jsx:n,jsxs:e}=arguments[0];function _createMdxContent(o){const r={code:\"code\",figcaption:\"figcaption\",figure:\"figure\",p:\"p\",pre:\"pre\",span:\"span\",...o.components};return e(l,{children:[n(r.p,{children:\"The core logic executes within a strictly isolated environment, mapping structural representations to multi-dimensional data models.\"}),\"\\n\",e(r.figure,{\"data-rehype-pretty-code-figure\":\"\",children:[n(r.figcaption,{\"data-rehype-pretty-code-title\":\"\",\"data-language\":\"python\",\"data-theme\":\"monochrome\",children:\"core/optimizer.py\"}),n(r.pre,{style:{backgroundColor:\"#111111\",color:\"#d4d4d4\"},tabIndex:\"0\",\"data-language\":\"python\",\"data-theme\":\"monochrome\",children:e(r.code,{\"data-language\":\"python\",\"data-theme\":\"monochrome\",style:{display:\"grid\"},children:[e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"import\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" torch\"})]}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"import\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" torch\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"nn \"}),n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"as\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" nn\"})]}),\"\\n\",n(r.span,{\"data-line\":\"\",children:\" \"}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"class\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\" LatencyOptimizer\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"nn\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"Module\"}),n(r.span,{style:{color:\"#777777\"},children:\"):\"})]}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"    def\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" __init__\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#B3B3B3\"},children:\"self\"}),n(r.span,{style:{color:\"#777777\"},children:\",\"}),n(r.span,{style:{color:\"#B3B3B3\"},children:\" channels\"}),n(r.span,{style:{color:\"#777777\"},children:\":\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" int\"}),n(r.span,{style:{color:\"#777777\"},children:\"):\"})]}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#E5E5E5\"},children:\"        super\"}),n(r.span,{style:{color:\"#777777\"},children:\"().\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"__init__\"}),n(r.span,{style:{color:\"#777777\"},children:\"()\"})]}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"        self\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"conv \"}),n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"=\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" nn\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"Conv2d\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"channels\"}),n(r.span,{style:{color:\"#777777\"},children:\",\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\" channels\"}),n(r.span,{style:{color:\"#777777\"},children:\",\"}),n(r.span,{style:{color:\"#999999\"},children:\" 3\"}),n(r.span,{style:{color:\"#777777\"},children:\",\"}),n(r.span,{style:{color:\"#B3B3B3\"},children:\" padding\"}),n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"=\"}),n(r.span,{style:{color:\"#999999\"},children:\"1\"}),n(r.span,{style:{color:\"#777777\"},children:\")\"})]}),\"\\n\",n(r.span,{\"data-line\":\"\",children:\" \"}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"    def\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\" forward\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#B3B3B3\"},children:\"self\"}),n(r.span,{style:{color:\"#777777\"},children:\",\"}),n(r.span,{style:{color:\"#B3B3B3\"},children:\" x\"}),n(r.span,{style:{color:\"#777777\"},children:\":\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" torch\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"Tensor\"}),n(r.span,{style:{color:\"#777777\"},children:\")\"}),n(r.span,{style:{color:\"#777777\"},children:\" ->\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" torch\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\"Tensor\"}),n(r.span,{style:{color:\"#777777\"},children:\":\"})]}),\"\\n\",n(r.span,{\"data-line\":\"\",children:n(r.span,{style:{color:\"#666666\",fontStyle:\"italic\"},children:\"        # Focused computation without side-effects\"})}),\"\\n\",e(r.span,{\"data-line\":\"\",children:[n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"        return\"}),n(r.span,{style:{color:\"#D4D4D4\"},children:\" torch\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"relu\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#FFFFFF\",fontWeight:\"bold\"},children:\"self\"}),n(r.span,{style:{color:\"#777777\"},children:\".\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"conv\"}),n(r.span,{style:{color:\"#777777\"},children:\"(\"}),n(r.span,{style:{color:\"#E5E5E5\"},children:\"x\"}),n(r.span,{style:{color:\"#777777\"},children:\"))\"})]})]})})]})]})}return{default:function(l={}){const{wrapper:e}=l.components||{};return e?n(e,{...l,children:n(_createMdxContent,{...l})}):_createMdxContent(l)}};"
+  },
+  {
+    "title": "Interactive Churn Prediction Model Architecture",
+    "slug": "projects/dummy-work-live",
+    "category": "Work",
+    "date": "2025-10-15T00:00:00.000Z",
+    "shortDate": "Oct 2025",
+    "isLive": true,
+    "domain": [
+      "Machine Learning",
+      "Prediction Analysis"
+    ],
+    "techStack": [
+      "React",
+      "Python"
+    ],
+    "competencyScores": {
+      "analytics_eda": 80,
+      "statistical_reasoning": 90,
+      "machine_learning": 95,
+      "data_engineering": 70,
+      "cloud_infrastructure": 85,
+      "visualisation_bi": 40,
+      "communication": 60
+    },
+    "summary": "Drag a slider. Watch the model update.",
+    "code": "const{jsx:n}=arguments[0];function _createMdxContent(e){const t={p:\"p\",...e.components};return n(t.p,{children:\"Interactive node rendering pipeline test.\"})}return{default:function(e={}){const{wrapper:t}=e.components||{};return t?n(t,{...e,children:n(_createMdxContent,{...e})}):_createMdxContent(e)}};"
+  },
+  {
+    "title": "Why I stopped being afraid of Bayesian inference",
+    "slug": "projects/dummy-writing",
+    "category": "Writing",
+    "date": "2026-04-10T00:00:00.000Z",
+    "shortDate": "Apr 2026",
+    "domain": [
+      "Statistics"
+    ],
+    "techStack": [],
+    "competencyScores": {
+      "analytics_eda": 30,
+      "statistical_reasoning": 90,
+      "machine_learning": 95,
+      "data_engineering": 70,
+      "cloud_infrastructure": 85,
+      "visualisation_bi": 40,
+      "communication": 60
+    },
+    "summary": "Writing log test entry",
+    "code": "const{jsx:n}=arguments[0];function _createMdxContent(t){const e={p:\"p\",...t.components};return n(e.p,{children:\"The statistics are sound.\"})}return{default:function(t={}){const{wrapper:e}=t.components||{};return e?n(e,{...t,children:n(_createMdxContent,{...t})}):_createMdxContent(t)}};"
+  }
+]
