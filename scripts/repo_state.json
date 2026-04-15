@@ -1,4 +1,33 @@
 {
   "github_username": "ArunPrakash2901",
-  "repositories": {}
+  "repositories": {
+    "Mortality_prediction_ICU_data": {
+      "pushed_at": "2026-04-15T07:55:41Z",
+      "scored_by": "fallback-zeros",
+      "scored_at": "2026-04-15T12:23:48.044767+00:00",
+      "scores": {
+        "analytics_eda": 0,
+        "statistical_reasoning": 0,
+        "machine_learning": 0,
+        "data_engineering": 0,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 0,
+        "communication": 0
+      }
+    },
+    "Estimation_GSP": {
+      "pushed_at": "2025-11-03T06:05:12Z",
+      "scored_by": "fallback-zeros",
+      "scored_at": "2026-04-15T12:23:49.389302+00:00",
+      "scores": {
+        "analytics_eda": 0,
+        "statistical_reasoning": 0,
+        "machine_learning": 0,
+        "data_engineering": 0,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 0,
+        "communication": 0
+      }
+    }
+  }
 }
