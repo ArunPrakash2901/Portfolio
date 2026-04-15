@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 STATE_FILE = "scripts/repo_state.json"
 SCORES_FILE = "public/scores.json"
-TARGET_REPOS = ["Mortality_prediction_ICU_data", "Estimation_GSP", "Melbourne-oil-Scacity-outlook"]
+TARGET_REPOS = ["Mortality_prediction_ICU_data", "Estimation_GSP", "Melbourne-oil-Scarity-outlook"]
 
 # Minimum score for a repo to appear in the "contributing projects" list for an
 # axis. Set at 60 to filter out repos with only incidental relevance — a repo
