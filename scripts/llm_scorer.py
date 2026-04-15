@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 STATE_FILE = "scripts/repo_state.json"
 SCORES_FILE = "public/scores.json"
+TARGET_REPOS = ["Mortality_prediction_ICU_data", "Estimation_GSP", "Melbourne-oil-Scacity-outlook"]
 
 # Minimum score for a repo to appear in the "contributing projects" list for an
 # axis. Set at 60 to filter out repos with only incidental relevance — a repo
@@ -351,6 +352,9 @@ def main():
     except Exception as e:
         print(f"Failed fetching repos: {e}")
         return
+
+    # Filter repos based on whitelist
+    repos = [r for r in repos if r["name"] in TARGET_REPOS]
 
     # ── Force re-eval mode ────────────────────────────────────────────────
     if args.force_reeval:
