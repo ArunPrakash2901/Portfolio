@@ -6,6 +6,7 @@ interface RadarData {
   competency: string;
   score: number;
   contributingProjects?: string[];
+  [key: string]: unknown;
 }
 
 interface RadarChartProps {
@@ -39,9 +40,11 @@ export default function RadarChart({ data }: RadarChartProps) {
         animate={true}
         theme={{
           background: "transparent",
-          textColor: "#5A5650",
-          fontSize: 10,
-          fontFamily: "var(--font-dm-sans), sans-serif",
+          text: {
+            fill: "#5A5650",
+            fontSize: 10,
+            fontFamily: "var(--font-dm-sans), sans-serif",
+          },
           grid: {
             line: {
               stroke: "#D4C9B8",
@@ -50,7 +53,7 @@ export default function RadarChart({ data }: RadarChartProps) {
           },
         }}
         sliceTooltip={({ index, data: chartData }) => {
-          const item = chartData[index] as any;
+          const item = (chartData as any[]).find((d: any) => d.competency === index) || {} as any;
           const projects = item.contributingProjects || [];
           
           return (
