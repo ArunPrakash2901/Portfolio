@@ -36,7 +36,8 @@ jobs:
           git add scripts/repo_state.json public/scores.json
           git diff-index --quiet HEAD || (
             git commit -m "chore: execute CDC load and sync LLM aggregated scores" &&
-            git pull --rebase origin master &&
-            git push
+            git fetch origin master &&
+            git rebase origin/master &&
+            git push origin master
           )
 # kickstart workflow
