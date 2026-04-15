@@ -37,3 +37,4 @@ jobs:
           git status
           git diff-index --quiet HEAD || git commit -m "chore: execute CDC load and sync LLM aggregated scores"
           git push
+# kickstart workflow
