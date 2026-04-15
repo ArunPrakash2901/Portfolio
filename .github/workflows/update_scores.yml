@@ -34,7 +34,9 @@ jobs:
           git config --global user.name "LLM Pipeline Bot"
           git config --global user.email "bot@portfolio.com"
           git add scripts/repo_state.json public/scores.json
-          git status
-          git diff-index --quiet HEAD || git commit -m "chore: execute CDC load and sync LLM aggregated scores"
-          git push
+          git diff-index --quiet HEAD || (
+            git commit -m "chore: execute CDC load and sync LLM aggregated scores" &&
+            git pull --rebase origin master &&
+            git push
+          )
 # kickstart workflow
