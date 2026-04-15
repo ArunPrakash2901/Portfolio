@@ -61,11 +61,11 @@ export default function Home() {
       <div className="flex items-center gap-2 px-3 py-1.5 bg-[#EFEBE3] border-b-[0.5px] border-[#E0DAD0] text-[10px] font-medium tracking-[0.12em] uppercase text-[#999999]">
         hero
       </div>
-      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[360px] bg-[#F7F4EF]">
+      <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-[360px] bg-[#F7F4EF]">
         <div className="p-8 md:p-11 flex flex-col justify-center gap-[18px]">
           <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#9B8B6E]">Data Professional · Melbourne</span>
-          <h1 className="font-serif text-[38px] leading-[1.1] text-[#1A1814] m-0">Turning messy data into decisions people trust.</h1>
-          <p className="text-[15px] text-[#5A5650] leading-[1.6] max-w-[340px] m-0">I work across the full data stack — from raw pipelines to polished insights. Currently building, learning, and looking for my first role.</p>
+          <h1 className="font-serif text-[42px] leading-[1.1] text-[#1A1814] m-0">Arun Krishnasamy</h1>
+          <p className="text-[17px] text-[#5A5650] leading-[1.6] max-w-[440px] m-0">I&apos;m at the beginning of my story in data; but I show up curious, I stay until it makes sense, and I let the numbers do the talking.</p>
           <div className="flex gap-6 pt-2 mt-2 border-t-[0.5px] border-[#E0DAD0]">
             <div className="flex flex-col gap-0.5">
               <span className="font-serif text-[22px] text-[#1A1814]">12+</span>
@@ -193,25 +193,25 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-4">
            {/* Step 1 */}
            <div className="px-5 py-[22px] border-l-0 md:border-l-[0.5px] border-t-[0.5px] md:border-t-0 border-[#2E2A25] first:border-l-0 first:border-t-0 flex flex-col">
-             <div className="font-serif text-[34px] text-[#2E2A25] leading-none mb-3.5">01</div>
+             <div className="font-serif text-[34px] text-[#6B7280] leading-none mb-3.5">01</div>
              <div className="text-[13px] font-medium text-[#D4C9B8] mb-[7px]">Understand before touching</div>
              <div className="text-[12px] text-[#5A5650] leading-[1.6]">Frame the question. Challenge the brief. <span className="text-[#9B8B6E] italic">A wrong question answered perfectly is still wrong.</span></div>
            </div>
            {/* Step 2 */}
            <div className="px-5 py-[22px] border-l-0 md:border-l-[0.5px] border-t-[0.5px] md:border-t-0 border-[#2E2A25] flex flex-col">
-             <div className="font-serif text-[34px] text-[#2E2A25] leading-none mb-3.5">02</div>
+             <div className="font-serif text-[34px] text-[#6B7280] leading-none mb-3.5">02</div>
              <div className="text-[13px] font-medium text-[#D4C9B8] mb-[7px]">Let the data speak first</div>
              <div className="text-[12px] text-[#5A5650] leading-[1.6]">EDA before assumptions. <span className="text-[#9B8B6E] italic">The data usually knows something you don't.</span></div>
            </div>
            {/* Step 3 */}
            <div className="px-5 py-[22px] border-l-0 md:border-l-[0.5px] border-t-[0.5px] md:border-t-0 border-[#2E2A25] flex flex-col">
-             <div className="font-serif text-[34px] text-[#2E2A25] leading-none mb-3.5">03</div>
+             <div className="font-serif text-[34px] text-[#6B7280] leading-none mb-3.5">03</div>
              <div className="text-[13px] font-medium text-[#D4C9B8] mb-[7px]">Model with intent</div>
              <div className="text-[12px] text-[#5A5650] leading-[1.6]">Right tool, not flashiest. <span className="text-[#9B8B6E] italic">Interpretability often matters more than accuracy.</span></div>
            </div>
            {/* Step 4 */}
            <div className="px-5 py-[22px] border-l-0 md:border-l-[0.5px] border-t-[0.5px] md:border-t-0 border-[#2E2A25] flex flex-col">
-             <div className="font-serif text-[34px] text-[#2E2A25] leading-none mb-3.5">04</div>
+             <div className="font-serif text-[34px] text-[#6B7280] leading-none mb-3.5">04</div>
              <div className="text-[13px] font-medium text-[#D4C9B8] mb-[7px]">Make it land</div>
              <div className="text-[12px] text-[#5A5650] leading-[1.6]">Speak to people who don't think in p-values. <span className="text-[#9B8B6E] italic">Insight that isn't understood isn't insight.</span></div>
            </div>
@@ -271,14 +271,10 @@ export default function Home() {
               </div>
               <div className="p-6 md:p-6 flex flex-col justify-center gap-2">
                  <span className="text-[10px] font-medium tracking-[0.1em] uppercase text-[#9B8B6E]">Beyond the notebook</span>
-                 <h3 className="font-serif text-[18px] text-[#1A1814] leading-[1.3] m-0">Piano covers &amp; four years of guitar</h3>
-                 <p className="text-[12px] text-[#5A5650] leading-[1.7] max-w-[360px] m-0 line-clamp-3 md:line-clamp-none">
-                   Music is where I go when the datasets are closed. There's more overlap than you'd think — pattern recognition, deliberate practice, sitting with complexity until it resolves. I post piano covers occasionally on Instagram.
-                 </p>
-                 <div className="flex gap-2 flex-wrap mt-1">
+                 <h3 className="font-serif text-[18px] text-[#1A1814] leading-[1.3] m-0">Guitar and piano. Always learning, always playing.</h3>
+                 <div className="flex gap-2 flex-wrap mt-2">
+                   <span className="text-[10px] text-[#9B8B6E] border-[0.5px] border-[#D4C9B8] px-2.5 py-[3px] rounded-full bg-[#F7F4EF]">Guitar</span>
                    <span className="text-[10px] text-[#9B8B6E] border-[0.5px] border-[#D4C9B8] px-2.5 py-[3px] rounded-full bg-[#F7F4EF]">Piano</span>
-                   <span className="text-[10px] text-[#9B8B6E] border-[0.5px] border-[#D4C9B8] px-2.5 py-[3px] rounded-full bg-[#F7F4EF]">Guitar · 4 years</span>
-                   <span className="text-[10px] text-[#9B8B6E] border-[0.5px] border-[#D4C9B8] px-2.5 py-[3px] rounded-full bg-[#F7F4EF]">Instagram covers</span>
                  </div>
               </div>
            </div>
