@@ -22,7 +22,7 @@ CONTRIBUTION_THRESHOLD = 60
 RECENCY_HALFLIFE_DAYS = 180
 
 # File extensions worth sampling actual code from (beyond README + tree).
-KEY_FILE_EXTENSIONS = (".py", ".sql", ".r", ".scala", ".java", ".ts", ".js", ".ipynb", ".Rmd")
+KEY_FILE_EXTENSIONS = (".py", ".sql", ".R", ".scala", ".java", ".ts", ".js", ".ipynb", ".Rmd", ".qmd", ".cpp")
 
 # Skip files matching these substrings when sampling code — boilerplate, tests,
 # and generated files add noise without signal.
