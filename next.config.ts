@@ -15,11 +15,7 @@ class VeliteWebpackPlugin {
 }
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    resolveAlias: {
-      "#velite": "./.velite",
-    },
-  },
+  turbopack: {},
   webpack: (config) => {
     config.plugins.push(new VeliteWebpackPlugin());
     config.resolve.alias = {
