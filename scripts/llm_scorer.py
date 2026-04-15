@@ -2,7 +2,7 @@ import os
 import json
 import argparse
 import requests
-import google.generativeai as genai
+from google import genai
 from groq import Groq
 from datetime import datetime, timezone
 
@@ -215,14 +215,16 @@ SAMPLED SOURCE CODE:
 {code_samples}
 """
 
-    # Primary: Gemini 1.5 Flash (free tier)
+    # Primary: Gemini 2.0 Flash (free tier)
     try:
-        genai.configure(api_key=os.environ.get("GEMINI_API_KEY", ""))
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        response = model.generate_content(prompt)
+        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", ""))
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
         content = response.text.replace("```json", "").replace("```", "").strip()
         raw_scores = json.loads(content)
-        return validate_scores(raw_scores), "gemini-1.5-flash"
+        return validate_scores(raw_scores), "gemini-2.0-flash"
     except Exception as e:
         print(f"  Gemini failed: {e}. Falling back to Groq LLaMA 3...")
 
@@ -231,7 +233,7 @@ SAMPLED SOURCE CODE:
         client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
         chat_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
-            model="llama3-70b-8192",
+            model="llama-3.3-70b-versatile",
             response_format={"type": "json_object"},
         )
         content = chat_completion.choices[0].message.content
