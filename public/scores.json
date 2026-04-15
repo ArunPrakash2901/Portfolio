@@ -1,37 +1,54 @@
 [
   {
     "competency": "Analytics / EDA",
-    "score": 0,
-    "contributingProjects": []
+    "score": 75,
+    "contributingProjects": [
+      "Estimation_GSP",
+      "Mortality_prediction_ICU_data"
+    ]
   },
   {
     "competency": "Stats Reason",
-    "score": 0,
-    "contributingProjects": []
+    "score": 83,
+    "contributingProjects": [
+      "Estimation_GSP",
+      "Mortality_prediction_ICU_data"
+    ]
   },
   {
     "competency": "Machine Learning",
-    "score": 0,
-    "contributingProjects": []
+    "score": 73,
+    "contributingProjects": [
+      "Mortality_prediction_ICU_data"
+    ]
   },
   {
     "competency": "Data Eng",
-    "score": 0,
-    "contributingProjects": []
+    "score": 67,
+    "contributingProjects": [
+      "Estimation_GSP",
+      "Mortality_prediction_ICU_data"
+    ]
   },
   {
     "competency": "Cloud / Infra",
-    "score": 0,
+    "score": 20,
     "contributingProjects": []
   },
   {
     "competency": "Viz / BI",
-    "score": 0,
-    "contributingProjects": []
+    "score": 80,
+    "contributingProjects": [
+      "Mortality_prediction_ICU_data",
+      "Estimation_GSP"
+    ]
   },
   {
     "competency": "Communication",
-    "score": 0,
-    "contributingProjects": []
+    "score": 80,
+    "contributingProjects": [
+      "Mortality_prediction_ICU_data",
+      "Estimation_GSP"
+    ]
   }
 ]
