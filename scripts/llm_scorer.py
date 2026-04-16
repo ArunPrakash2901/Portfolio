@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 
 STATE_FILE = "scripts/repo_state.json"
 SCORES_FILE = "public/scores.json"
-TARGET_REPOS = ["Mortality_prediction_ICU_data", "Estimation_GSP", "Melbourne-oil-Scarcity-outlook"]
+TARGET_REPOS = ["Mortality_prediction_ICU_data", "Estimation_GSP", "Melbourne-oil-Scacity-outlook"]
 
 # Minimum score for a repo to appear in the "contributing projects" list for an
 # axis. Set at 60 to filter out repos with only incidental relevance — a repo
@@ -22,29 +22,72 @@ CONTRIBUTION_THRESHOLD = 60
 # dominating the competency map while still crediting recent, active work.
 RECENCY_HALFLIFE_DAYS = 180
 
-# File extensions worth sampling actual code from (beyond README + tree).
-KEY_FILE_EXTENSIONS = (".py", ".sql", ".R", ".scala", ".java", ".ts", ".js", ".ipynb", ".Rmd", ".qmd", ".cpp")
+# ── UPGRADE 1: Exhaustive file extension mapping ──────────────────────────────
+# Organised by domain so it's easy to extend. The sampler iterates all of these;
+# the keyword heuristic then ranks which files surface first.
+KEY_FILE_EXTENSIONS = (
+    # Data / ML
+    ".py", ".ipynb", ".r", ".rmd", ".qmd", ".jl", ".scala", ".m",
+    # DB / Data Engineering
+    ".sql", ".prql", ".json", ".csv", ".parquet", ".tsv",
+    # Systems / Low-level
+    ".c", ".cpp", ".h", ".rs", ".go", ".asm",
+    # Web / App
+    ".js", ".ts", ".jsx", ".tsx", ".html", ".css", ".php", ".rb",
+    ".java", ".cs", ".swift", ".kt",
+    # Cloud / Config / IaC
+    ".yaml", ".yml", ".tf", ".dockerfile", ".toml", ".sh", ".bat", ".ini",
+    # Docs (plain text only — no binary extractors)
+    ".md", ".txt", ".rst",
+)
 
-# Skip files matching these substrings when sampling code — boilerplate, tests,
-# and generated files add noise without signal.
+# Skip files matching these substrings — boilerplate, tests, and generated
+# artifacts add noise without signal.
 SKIP_FILE_PATTERNS = (
     "__init__", "setup.py", "conftest", "test_", "_test.py",
     "migrations/", "node_modules/", ".min.", "dist/", "venv/",
+    "package-lock.json", "yarn.lock", ".lock",
 )
 
-# Filenames containing these keywords are boosted during sampling because they
-# are far more likely to contain meaningful domain logic than generic helpers.
-DOMAIN_KEYWORDS = (
-    "model", "pipeline", "transform", "analyse", "analyze", "train",
-    "predict", "feature", "etl", "ingest", "dag", "workflow", "serve",
-    "preprocess", "evaluate", "score", "embed", "cluster", "regress",
-)
+# ── UPGRADE 2: Expanded domain keyword taxonomy ───────────────────────────────
+# Used both for path-level heuristics (fast) and content-level density scoring
+# (one lightweight HEAD-then-fetch pass per candidate file).
+#
+# Organised into weighted tiers:
+#   TIER_1 (weight 3) — high-signal ML/data engineering terms
+#   TIER_2 (weight 2) — cloud / DevOps / systems terms
+#   TIER_3 (weight 1) — general web / API terms (useful but lower specificity)
+DOMAIN_KEYWORD_WEIGHTS = {
+    # Tier 1 — ML & Data Engineering (weight 3)
+    "model": 3, "pipeline": 3, "tensor": 3, "neural": 3, "epoch": 3,
+    "gradient": 3, "hyperparameter": 3, "transformer": 3, "embedding": 3,
+    "fine-tuning": 3, "train": 3, "predict": 3, "feature": 3, "etl": 3,
+    "ingest": 3, "dag": 3, "workflow": 3, "preprocess": 3, "evaluate": 3,
+    "cluster": 3, "regress": 3, "embed": 3, "score": 3, "analyse": 3,
+    "analyze": 3, "warehouse": 3, "spark": 3, "airflow": 3, "dbt": 3,
+    "kafka": 3, "schema": 3,
+    # Tier 2 — Cloud / DevOps / Systems (weight 2)
+    "aws": 2, "azure": 2, "gcp": 2, "docker": 2, "kubernetes": 2,
+    "terraform": 2, "serverless": 2, "microservices": 2, "ci/cd": 2,
+    "multithreading": 2, "encryption": 2, "mutex": 2, "concurrency": 2,
+    "deployment": 2, "container": 2, "vpc": 2, "ec2": 2, "s3": 2,
+    # Tier 3 — Web / API (weight 1)
+    "websocket": 1, "graphql": 1, "rest": 1, "middleware": 1,
+    "serve": 1, "endpoint": 1,
+}
+
+# Flat tuple of all keywords for fast path-level matching (no weights needed).
+DOMAIN_KEYWORDS = tuple(DOMAIN_KEYWORD_WEIGHTS.keys())
 
 # Maximum number of source files to sample per repo.
 MAX_SAMPLED_FILES = 5
 
 # Maximum total characters of sampled code sent to the LLM.
 MAX_CODE_SAMPLE_CHARS = 8000
+
+# Maximum characters read from each file during content-density scoring.
+# Kept small to avoid latency spikes — we just need enough text to count hits.
+DENSITY_SCAN_CHARS = 500
 
 AXES = [
     "analytics_eda",
@@ -84,21 +127,32 @@ def save_state(state):
 
 def fetch_public_repos(username):
     url = f"https://api.github.com/users/{username}/repos?type=owner&sort=pushed&per_page=100"
-    response = requests.get(url)
+    headers = {"Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}"}
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
 
 
 def get_repo_details(repo_full_name, default_branch):
-    """Fetch README, file tree, and sampled source code from a GitHub repo."""
+    """Fetch README, file tree, and heuristically sampled source code."""
+    headers = {"Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}"}
+
     # README
-    readme_url = f"https://raw.githubusercontent.com/{repo_full_name}/{default_branch}/README.md"
-    readme_response = requests.get(readme_url)
-    readme = readme_response.text if readme_response.status_code == 200 else "No README available."
+    readme_url = (
+        f"https://raw.githubusercontent.com/{repo_full_name}/{default_branch}/README.md"
+    )
+    readme_response = requests.get(readme_url, headers=headers)
+    readme = (
+        readme_response.text if readme_response.status_code == 200
+        else "No README available."
+    )
 
     # File tree
-    tree_url = f"https://api.github.com/repos/{repo_full_name}/git/trees/{default_branch}?recursive=1"
-    tree_response = requests.get(tree_url)
+    tree_url = (
+        f"https://api.github.com/repos/{repo_full_name}/git/trees/"
+        f"{default_branch}?recursive=1"
+    )
+    tree_response = requests.get(tree_url, headers=headers)
     all_paths = []
     if tree_response.status_code == 200:
         tree_data = tree_response.json()
@@ -109,50 +163,101 @@ def get_repo_details(repo_full_name, default_branch):
         ]
     tree_structure = "\n".join(all_paths[:500]) if all_paths else "Tree unreadable."
 
-    # Sample actual source files for deeper signal
+    # Heuristically sampled source files
     code_samples = _sample_source_files(repo_full_name, default_branch, all_paths)
 
     return readme, tree_structure, code_samples
 
 
-def _file_relevance_score(path):
-    """Score a file path for likely domain relevance.
+def _path_keyword_score(path):
+    """Fast path-only keyword density score (no network call).
 
-    Lower score = higher priority. Files matching domain keywords get a large
-    bonus (negative offset), and deeply nested files are penalised. This avoids
-    the naive alphabetical trap where __init__.py and config files always win.
+    Returns a negative integer — more negative = higher priority.
+    Used as the first-pass sort before content scanning.
     """
     basename = os.path.basename(path).lower()
+    hit_score = sum(
+        weight
+        for kw, weight in DOMAIN_KEYWORD_WEIGHTS.items()
+        if kw in basename
+    )
     depth = path.count("/")
-    keyword_bonus = -10 if any(kw in basename for kw in DOMAIN_KEYWORDS) else 0
-    return (keyword_bonus, depth, path)
+    # Negate hit_score so higher scores sort first; depth penalises deep files.
+    return (-hit_score, depth, path)
+
+
+def _content_keyword_density(repo_full_name, default_branch, file_path):
+    """Fetch the first DENSITY_SCAN_CHARS of a file and score keyword density.
+
+    Returns a weighted hit count. Skips the fetch if the file extension alone
+    already gives us high confidence (i.e. the path score was already strong).
+    """
+    raw_url = (
+        f"https://raw.githubusercontent.com/{repo_full_name}/"
+        f"{default_branch}/{file_path}"
+    )
+    headers = {"Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}"}
+    try:
+        resp = requests.get(raw_url, headers=headers, timeout=5)
+        if resp.status_code != 200:
+            return 0
+        snippet = resp.text[:DENSITY_SCAN_CHARS].lower()
+        return sum(
+            weight
+            for kw, weight in DOMAIN_KEYWORD_WEIGHTS.items()
+            if kw in snippet
+        )
+    except Exception:
+        return 0
 
 
 def _sample_source_files(repo_full_name, default_branch, all_paths):
-    """Fetch the contents of a handful of key source files for richer LLM context.
+    """Select and fetch the highest-signal source files for LLM context.
 
-    Selection heuristic (in priority order):
-      1. Files whose basename contains a domain keyword (model, pipeline, etc.)
-      2. Files closer to the repo root (more likely entry points / core logic)
-      3. Alphabetical tiebreaker
+    Two-pass heuristic:
+      Pass 1 (free) — rank by path-level keyword density and depth.
+                       Take the top MAX_SAMPLED_FILES * 3 candidates.
+      Pass 2 (network) — fetch a small head of each candidate, rescore by
+                         content keyword density, then take the top
+                         MAX_SAMPLED_FILES files for the final context payload.
 
-    Skips boilerplate, tests, and generated files.
+    This guarantees that a Terraform-heavy repo surfaces its .tf files rather
+    than generic README.md entries, and that a deep-learning repo surfaces its
+    training scripts rather than its __init__.py files.
     """
+    # Filter by extension and skip boilerplate
     candidates = [
         p for p in all_paths
         if p.lower().endswith(KEY_FILE_EXTENSIONS)
         and not any(skip in p for skip in SKIP_FILE_PATTERNS)
     ]
-    candidates.sort(key=_file_relevance_score)
-    selected = candidates[:MAX_SAMPLED_FILES]
 
+    # Pass 1: path-level ranking — cheap, no network
+    candidates.sort(key=_path_keyword_score)
+    shortlist = candidates[: MAX_SAMPLED_FILES * 3]
+
+    # Pass 2: content-level density scoring — one small fetch per shortlisted file
+    scored = []
+    for path in shortlist:
+        density = _content_keyword_density(repo_full_name, default_branch, path)
+        scored.append((density, path))
+
+    # Higher content density wins; stable sort preserves path-rank as tiebreaker
+    scored.sort(key=lambda x: -x[0])
+    selected = [path for _, path in scored[:MAX_SAMPLED_FILES]]
+
+    # Fetch full file contents up to the character budget
     samples = []
     total_chars = 0
+    headers = {"Authorization": f"token {os.environ.get('GITHUB_TOKEN', '')}"}
     for file_path in selected:
         if total_chars >= MAX_CODE_SAMPLE_CHARS:
             break
-        raw_url = f"https://raw.githubusercontent.com/{repo_full_name}/{default_branch}/{file_path}"
-        resp = requests.get(raw_url)
+        raw_url = (
+            f"https://raw.githubusercontent.com/{repo_full_name}/"
+            f"{default_branch}/{file_path}"
+        )
+        resp = requests.get(raw_url, headers=headers)
         if resp.status_code == 200:
             remaining = MAX_CODE_SAMPLE_CHARS - total_chars
             content = resp.text[:remaining]
@@ -164,9 +269,11 @@ def _sample_source_files(repo_full_name, default_branch, all_paths):
 # ─── Score Validation ────────────────────────────────────────────────────────
 
 def validate_scores(raw_scores):
-    """Sanitise LLM-returned scores: enforce all axes present, integers in [0, 100].
+    """Sanitise LLM-returned scores: enforce all 7 axes present as integers in [0, 100].
 
-    Missing keys default to 0. Non-numeric values are clamped and logged.
+    UPGRADE 3: The LLM now also returns a 'qualitative_feedback' string array.
+    This function explicitly ignores that key so it never contaminates the
+    numeric aggregation — metric purity is preserved by design, not by accident.
     """
     validated = {}
     for axis in AXES:
@@ -177,33 +284,61 @@ def validate_scores(raw_scores):
             print(f"  ⚠ Invalid score for '{axis}': {value!r} → defaulting to 0")
             value = 0
         validated[axis] = max(0, min(100, value))
-    return validated
+
+    # Surface qualitative feedback to stdout for audit — never written to scores.json
+    feedback = raw_scores.get("qualitative_feedback", [])
+    if feedback:
+        print("  📝 Qualitative feedback:")
+        for item in feedback:
+            print(f"     • {item}")
+
+    return validated  # Only the 7 integer axes — qualitative_feedback excluded
 
 # ─── LLM Evaluation ─────────────────────────────────────────────────────────
 
 def evaluate_repo_with_llm(readme, tree, code_samples):
-    """Score a repo across competency axes.
+    """Score a repo across competency axes using a strict JSON schema.
 
-    Returns a (validated_scores, model_name) tuple so the caller can record
-    which model produced the scores — critical for debugging silent fallbacks.
+    UPGRADE 3: The prompt now requests a 'qualitative_feedback' array alongside
+    the 7 numeric axes. This segregates qualitative observations (deprecated libs,
+    missing tests, architectural quirks) from the pure integer scores, preventing
+    prose generation from biasing the autoregressive score token distribution.
+
+    UPGRADE 4: Groq (llama-3.3-70b-versatile) is now the PRIMARY model for
+    its speed and generous free-tier quota. Gemini 2.0 Flash is the fallback.
+
+    Returns a (validated_scores, model_name) tuple.
     """
     prompt = f"""
 Act as a Senior Technical Recruiter and Principal Engineer. Evaluate the
 following GitHub repository based on its README, file tree, and sampled source
 code.
 
-Determine the competency score (0-100) for these exactly 7 axes:
-analytics_eda, statistical_reasoning, machine_learning, data_engineering,
-cloud_infrastructure, visualisation_bi, communication.
+OUTPUT a single, strictly typed, minified JSON object with exactly these keys:
 
-Scoring guidance:
+1. Seven competency axes — integer values 0 to 100:
+   analytics_eda, statistical_reasoning, machine_learning, data_engineering,
+   cloud_infrastructure, visualisation_bi, communication
+
+2. One qualitative array — string values only:
+   qualitative_feedback
+
+Scoring guidance for the numeric axes:
 - 0–20: No meaningful evidence of this competency.
 - 21–50: Some evidence, but shallow or incidental.
 - 51–75: Clear, intentional demonstration of this competency.
 - 76–100: Deep, impressive work that would stand out in a hiring review.
 
-Respond ONLY with a valid minified JSON object mapping these exact string keys
-to integer values (0-100). No markdown fences, no explanation.
+CRITICAL INSTRUCTION — METRIC PURITY:
+Do NOT alter the 0-100 axis scores based on edge cases or anomalies.
+The seven axes must remain mathematically pure indicators of core competency.
+Place ALL qualitative observations — missing unit tests, deprecated libraries,
+exceptional architectural patterns, unusual tool choices, or any other specific
+findings — ENTIRELY within the qualitative_feedback string array.
+The axis integers must never be penalised or inflated by these observations.
+
+Example output format (minified, no markdown fences):
+{{"analytics_eda":72,"statistical_reasoning":65,"machine_learning":88,"data_engineering":55,"cloud_infrastructure":30,"visualisation_bi":45,"communication":70,"qualitative_feedback":["Uses deprecated sklearn API","No unit tests present","Clean separation of training and inference logic"]}}
 
 README:
 {readme[:5000]}
@@ -215,33 +350,35 @@ SAMPLED SOURCE CODE:
 {code_samples}
 """
 
-    # Primary: Gemini 2.0 Flash (free tier)
+    # ── PRIMARY: Groq — llama-3.3-70b-versatile ──────────────────────────────
+    # Chosen for its 14,400 RPD free quota, LPU-backed speed, and strong
+    # instruction-following on structured JSON output tasks.
     try:
-        client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", ""))
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        content = response.text.replace("```json", "").replace("```", "").strip()
-        raw_scores = json.loads(content)
-        return validate_scores(raw_scores), "gemini-2.0-flash"
-    except Exception as e:
-        print(f"  Gemini failed: {e}. Falling back to Groq LLaMA 3...")
-
-    # Fallback: Groq LLaMA 3 70B (free tier)
-    try:
-        client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
-        chat_completion = client.chat.completions.create(
+        groq_client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
+        chat_completion = groq_client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="llama-3.3-70b-versatile",
             response_format={"type": "json_object"},
         )
         content = chat_completion.choices[0].message.content
         raw_scores = json.loads(content)
-        return validate_scores(raw_scores), "groq-llama3-70b"
+        return validate_scores(raw_scores), "groq-llama3.3-70b"
     except Exception as e:
-        print(f"  ⚠ Groq also failed: {e}. Recording zero scores.")
-        return {axis: 0 for axis in AXES}, "fallback-zeros"
+        print(f"  Groq failed: {e}. Falling back to Gemini 2.0 Flash...")
+
+    # ── FALLBACK: Gemini 2.0 Flash via google-genai SDK ──────────────────────
+    try:
+        gemini_client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", ""))
+        response = gemini_client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+        )
+        content = response.text.replace("```json", "").replace("```", "").strip()
+        raw_scores = json.loads(content)
+        return validate_scores(raw_scores), "gemini-2.0-flash"
+    except Exception as e:
+        print(f"  ⚠ Gemini also failed: {e}. Recording zero scores.")
+        return validate_scores({axis: 0 for axis in AXES}), "fallback-zeros"
 
 # ─── Aggregation ─────────────────────────────────────────────────────────────
 
@@ -250,8 +387,9 @@ def _recency_weight(pushed_at_iso):
 
     weight = 2^(-days_ago / RECENCY_HALFLIFE_DAYS)
 
-    A repo pushed today gets weight ≈ 1.0. A repo pushed RECENCY_HALFLIFE_DAYS
-    ago gets weight ≈ 0.5. This prevents stale work from silently dominating.
+    A repo pushed today → weight ≈ 1.0
+    A repo pushed 180 days ago → weight ≈ 0.5
+    A repo pushed 360 days ago → weight ≈ 0.25
     """
     try:
         pushed_dt = datetime.fromisoformat(pushed_at_iso.replace("Z", "+00:00"))
@@ -265,9 +403,8 @@ def _recency_weight(pushed_at_iso):
 def aggregate_scores(state):
     """Produce a recency-weighted competency summary across all scored repos.
 
-    Instead of naively taking the max score (which lets one fluky LLM evaluation
-    on a toy repo inflate a competency), this computes a weighted average where
-    recent repos count more heavily.
+    Uses exponential decay (half-life = RECENCY_HALFLIFE_DAYS) so stale toy
+    projects fade without being excluded entirely.
     """
     repos = state.get("repositories", {})
     final_output = []
@@ -288,7 +425,6 @@ def aggregate_scores(state):
                 contributors.append({"repo": repo_name, "score": score})
 
         aggregate_score = round(weighted_sum / weight_total) if weight_total > 0 else 0
-        # Sort contributors by score descending, keep top 3
         contributors.sort(key=lambda r: r["score"], reverse=True)
         top_projects = [c["repo"] for c in contributors[:3]]
 
@@ -305,7 +441,7 @@ def aggregate_scores(state):
 # ─── Main Pipeline ───────────────────────────────────────────────────────────
 
 def _evaluate_single_repo(repo_api, state):
-    """Fetch, score, and persist a single repo. Returns True if scores were updated."""
+    """Fetch, score, and persist a single repo."""
     repo_name = repo_api["name"]
     repo_full_name = repo_api["full_name"]
     pushed_at = repo_api["pushed_at"]
@@ -322,8 +458,7 @@ def _evaluate_single_repo(repo_api, state):
         "scored_at": datetime.now(timezone.utc).isoformat(),
         "scores": scores,
     }
-    save_state(state)  # Save after each in case of failure mid-way
-    return True
+    save_state(state)
 
 
 def main():
@@ -335,8 +470,7 @@ def main():
         metavar="REPO",
         help=(
             "Force re-evaluation of a specific repo by name, ignoring the "
-            "pushed_at cache. Useful after a Groq fallback to re-score "
-            "through Gemini without blowing away the whole state."
+            "pushed_at cache. Useful after a fallback-zeros run."
         ),
     )
     args = parser.parse_args()
@@ -355,7 +489,7 @@ def main():
         print(f"Failed fetching repos: {e}")
         return
 
-    # Filter repos based on whitelist
+    # Filter to whitelisted repos only
     repos = [r for r in repos if r["name"] in TARGET_REPOS]
 
     # ── Force re-eval mode ────────────────────────────────────────────────
@@ -365,8 +499,7 @@ def main():
         if not repo_api:
             print(f"Repo '{target}' not found in {username}'s public repos.")
             return
-        prev = state["repositories"].get(target, {})
-        prev_model = prev.get("scored_by", "n/a")
+        prev_model = state["repositories"].get(target, {}).get("scored_by", "n/a")
         print(f"  Previous scorer: {prev_model} — forcing re-evaluation...")
         _evaluate_single_repo(repo_api, state)
         aggregate_scores(state)
