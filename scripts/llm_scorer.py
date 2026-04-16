@@ -15,7 +15,7 @@ SCORES_FILE = "public/scores.json"
 TARGET_REPOS = [
     "Mortality_prediction_ICU_data", 
     "Estimation_GSP", 
-    "Melbourne-oil-Scarcity-outlook"
+    "Melbourne-Oil-Scarcity-outlook"
 ]
 
 CONTRIBUTION_THRESHOLD = 60
@@ -71,7 +71,7 @@ AXIS_DISPLAY_MAP = {
 
 def get_github_headers():
     """Inject GITHUB_TOKEN to bypass rate limits and 401 errors."""
-    token = os.environ.get("GH_TOKEN", "")
+    token = os.environ.get("GITHUB_TOKEN", "")
     headers = {"Accept": "application/vnd.github.v3+json"}
     if token:
         headers["Authorization"] = f"token {token}"
