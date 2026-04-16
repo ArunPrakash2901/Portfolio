@@ -1,4 +1,141 @@
 {
   "github_username": "ArunPrakash2901",
-  "repositories": {}
+  "repositories": {
+    "Mortality_prediction_ICU_data": {
+      "pushed_at": "2026-04-15T07:55:41Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:12.789106+00:00",
+      "scores": {
+        "analytics_eda": 90,
+        "statistical_reasoning": 85,
+        "machine_learning": 95,
+        "data_engineering": 80,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 70,
+        "communication": 90
+      },
+      "qualitative_feedback": [
+        "The project uses a variety of models, including logistic regression, Random Forest, XGBoost, Neural Network, and stacked ensemble models.",
+        "Feature engineering is thorough, with the creation of new features such as grouped ICD 9 codes, Charlson and Elixhauser comorbidity scores, and GloVe embeddings.",
+        "The use of SHAP values and feature importance plots provides good interpretability of the models.",
+        "The project could benefit from more detailed statistical analysis and experimentation with different hyperparameters.",
+        "There is no evidence of cloud infrastructure usage in the project.",
+        "The presentation and report are well-structured, but could benefit from more visualizations and explanations of the results.",
+        "The code organization is generally good, but some scripts seem to be doing multiple unrelated tasks."
+      ]
+    },
+    "Melbourne-Oil-Scarcity-outlook": {
+      "pushed_at": "2026-04-08T10:03:33Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:14.655941+00:00",
+      "scores": {
+        "analytics_eda": 20,
+        "statistical_reasoning": 10,
+        "machine_learning": 0,
+        "data_engineering": 30,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 10,
+        "communication": 40
+      },
+      "qualitative_feedback": [
+        "Lack of detailed explanation in the README file",
+        "No clear indication of machine learning or cloud infrastructure usage",
+        "Presence of eda_baseline_01.ipynb suggests some data analysis capabilities",
+        "ingest.py implies data ingesting capabilities, but no further information is provided",
+        "No sampled source code from ingest.py or eda_baseline_01.ipynb is provided for thorough evaluation"
+      ]
+    },
+    "Python-practice-Fun-way-": {
+      "pushed_at": "2026-02-21T09:43:57Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:17.372441+00:00",
+      "scores": {
+        "analytics_eda": 20,
+        "statistical_reasoning": 30,
+        "machine_learning": 0,
+        "data_engineering": 10,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 60,
+        "communication": 10
+      },
+      "qualitative_feedback": [
+        "No README file provided, which is crucial for project understanding and navigation.",
+        "The codebase seems to be a collection of separate projects or experiments, lacking a unified theme or goal.",
+        "There are multiple files with similar functionality, such as ball_simulation.py and balls.py, which could be refactored for better maintainability.",
+        "The use of turtle graphics and matplotlib suggests a focus on visualization, but the overall code organization and structure could be improved.",
+        "There are no apparent tests or validation mechanisms in place to ensure the correctness of the code.",
+        "Some variables and functions have unclear or misleading names, which could hinder code readability and understanding.",
+        "The code could benefit from more comments and docstrings to explain the purpose and behavior of each section."
+      ]
+    },
+    "Estimation_GSP": {
+      "pushed_at": "2025-11-03T06:05:12Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:19.886510+00:00",
+      "scores": {
+        "analytics_eda": 80,
+        "statistical_reasoning": 70,
+        "machine_learning": 40,
+        "data_engineering": 90,
+        "cloud_infrastructure": 10,
+        "visualisation_bi": 60,
+        "communication": 80
+      },
+      "qualitative_feedback": [
+        "The repository lacks sampled source code, making it difficult to evaluate certain competencies.",
+        "The project structure is well-organized, with clear separation of concerns.",
+        "The use of Quarto and R targets suggests a high level of data engineering competency.",
+        "The presence of various image files and presentation materials indicates a strong focus on communication and visualization.",
+        "The lack of cloud infrastructure is notable, as the project appears to be designed for local execution.",
+        "The project's focus on data sourcing and pipeline management suggests a strong emphasis on data engineering and analytics.",
+        "The use of R and Quarto suggests a potential limitation in terms of scalability and interoperability."
+      ]
+    },
+    "Federal_electorate_Demographics": {
+      "pushed_at": "2025-06-05T06:32:36Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:37.906906+00:00",
+      "scores": {
+        "analytics_eda": 70,
+        "statistical_reasoning": 40,
+        "machine_learning": 10,
+        "data_engineering": 60,
+        "cloud_infrastructure": 0,
+        "visualisation_bi": 80,
+        "communication": 30
+      },
+      "qualitative_feedback": [
+        "No README available, making it difficult to understand the project's purpose and goals.",
+        "The file tree is complex and includes many files, but most seem to be related to data storage and intermediate results rather than code organization.",
+        "The sampled source code demonstrates proficiency in data manipulation and visualization using R and associated libraries like sf, dplyr, and ggplot2.",
+        "There's a lack of machine learning or advanced statistical modeling in the provided source code.",
+        "No evidence of cloud infrastructure usage or integration.",
+        "Code organization and commenting could be improved for better readability and maintainability.",
+        "The project seems to focus heavily on data visualization and geographic information systems (GIS), suggesting strong skills in these areas."
+      ]
+    },
+    "Youth_employment_analysis": {
+      "pushed_at": "2025-06-05T05:30:31Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T03:16:53.552369+00:00",
+      "scores": {
+        "analytics_eda": 80,
+        "statistical_reasoning": 90,
+        "machine_learning": 20,
+        "data_engineering": 60,
+        "cloud_infrastructure": 10,
+        "visualisation_bi": 85,
+        "communication": 70
+      },
+      "qualitative_feedback": [
+        "No README file available, making it difficult to understand the project's purpose and scope.",
+        "The file tree is complex and includes multiple templates and data files, which could be better organized.",
+        "The sampled source code demonstrates good use of R libraries such as tidyverse, dplyr, and ggplot2 for data analysis and visualization.",
+        "The code could benefit from additional comments and explanations to improve readability and understanding.",
+        "There are no obvious signs of testing, which is an important aspect of ensuring the code's reliability and accuracy.",
+        "The use of specific tools like Quarto for reporting and knitr for chunking is notable, but their versions and compatibility could be checked for potential updates or issues.",
+        "The analysis and visualization provided in the report are thorough, but could be further improved with more detailed explanations and insights."
+      ]
+    }
+  }
 }
