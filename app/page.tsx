@@ -83,10 +83,10 @@ export default function Home() {
           </div>
         </div>
         <div className="relative bg-[#E8E1D5] hidden md:flex items-center justify-center overflow-hidden">
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#E8E1D5] to-[#D4C9B8] min-h-[260px]">
-             <Image src="/images/my-photo.jpg" alt="Arun Krishnasamy's photo" width={1529} height={2048} className="rounded-full object-cover w-full h-full" />
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#E8E1D5] to-[#D4C9B8] min-h-[260px] relative">
+             <Image src="/images/my-photo.jpeg" alt="Arun Krishnasamy's photo" width={1529} height={2048} className="object-cover w-full h-full z-0" priority />
           </div>
-          <div className="absolute bottom-4 right-4 bg-[#F7F4EF] border-[0.5px] border-[#E0DAD0] rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#1A1814] font-medium">
+          <div className="absolute bottom-4 right-4 bg-[#F7F4EF] border-[0.5px] border-[#E0DAD0] rounded-full px-3.5 py-1.5 flex items-center gap-1.5 text-[11px] text-[#1A1814] font-medium z-10">
             <div className="w-[7px] h-[7px] rounded-full bg-[#4CAF7E]"></div>
             Open to opportunities
           </div>
