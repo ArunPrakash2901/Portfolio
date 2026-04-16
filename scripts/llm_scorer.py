@@ -71,7 +71,7 @@ AXIS_DISPLAY_MAP = {
 
 def get_github_headers():
     """Inject GITHUB_TOKEN to bypass rate limits and 401 errors."""
-    token = os.environ.get("GITHUB_TOKEN", "")
+    token = os.environ.get("GH_TOKEN", "")
     headers = {"Accept": "application/vnd.github.v3+json"}
     if token:
         headers["Authorization"] = f"token {token}"
