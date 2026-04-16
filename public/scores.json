@@ -1,57 +1,59 @@
 [
   {
     "competency": "Analytics / EDA",
-    "score": 84,
+    "score": 54,
     "contributingProjects": [
       "Mortality_prediction_ICU_data",
-      "Melbourne-Oil-Scarcity-outlook",
-      "Estimation_GSP"
+      "Estimation_GSP",
+      "Youth_employment_analysis"
     ]
   },
   {
     "competency": "Stats Reason",
-    "score": 64,
+    "score": 50,
     "contributingProjects": [
+      "Youth_employment_analysis",
       "Mortality_prediction_ICU_data",
       "Estimation_GSP"
     ]
   },
   {
     "competency": "Machine Learning",
-    "score": 54,
+    "score": 32,
     "contributingProjects": [
       "Mortality_prediction_ICU_data"
     ]
   },
   {
     "competency": "Data Eng",
-    "score": 78,
+    "score": 51,
     "contributingProjects": [
       "Estimation_GSP",
       "Mortality_prediction_ICU_data",
-      "Melbourne-Oil-Scarcity-outlook"
+      "Federal_electorate_Demographics"
     ]
   },
   {
     "competency": "Cloud / Infra",
-    "score": 14,
+    "score": 2,
     "contributingProjects": []
   },
   {
     "competency": "Viz / BI",
-    "score": 64,
+    "score": 54,
     "contributingProjects": [
-      "Mortality_prediction_ICU_data",
-      "Melbourne-Oil-Scarcity-outlook",
-      "Estimation_GSP"
+      "Youth_employment_analysis",
+      "Federal_electorate_Demographics",
+      "Mortality_prediction_ICU_data"
     ]
   },
   {
     "competency": "Communication",
-    "score": 70,
+    "score": 53,
     "contributingProjects": [
       "Mortality_prediction_ICU_data",
-      "Estimation_GSP"
+      "Estimation_GSP",
+      "Youth_employment_analysis"
     ]
   }
 ]
