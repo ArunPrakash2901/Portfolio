@@ -15,7 +15,11 @@ SCORES_FILE = "public/scores.json"
 TARGET_REPOS = [
     "Mortality_prediction_ICU_data", 
     "Estimation_GSP", 
-    "Melbourne-Oil-Scarcity-outlook"
+    "Melbourne-Oil-Scarcity-outlook",
+    "Python-practice-Fun-way-",
+    "Federal_electorate_Demographics",
+    "Youth_employment_analysis",
+    "game-package-kangaroos"
 ]
 
 CONTRIBUTION_THRESHOLD = 60
@@ -98,7 +102,40 @@ def fetch_public_repos(username):
     response.raise_for_status()
     return response.json()
 
-def get_repo_details(repo_full_name, default_branch):
+def get_user_file_fingerprint(repo_full_name, username, headers):
+    """
+    Hits the GitHub Commits API to build a 'fingerprint' set of all file paths 
+    authored or modified specifically by the target user.
+    """
+    # Fetch the latest 50 commits by this specific user
+    commits_url = f"https://api.github.com/repos/{repo_full_name}/commits?author={username}&per_page=50"
+    resp = requests.get(commits_url, headers=headers)
+    
+    touched_files = set()
+    if resp.status_code != 200:
+        print(f"  ⚠ Could not fetch commits for {username}. Defaulting to all files.")
+        return touched_files
+
+    commits = resp.json()
+    if not commits:
+        print(f"  ⚠ No commits found for {username} in this repo.")
+        return touched_files
+
+    # Extract the exact files changed in those commits
+    for commit in commits:
+        sha = commit["sha"]
+        detail_url = f"https://api.github.com/repos/{repo_full_name}/commits/{sha}"
+        detail_resp = requests.get(detail_url, headers=headers)
+        if detail_resp.status_code == 200:
+            files = detail_resp.json().get("files", [])
+            for f in files:
+                touched_files.add(f["filename"])
+
+    print(f"  ✓ Found {len(touched_files)} files authored by {username}")
+    return touched_files
+
+def get_repo_details(repo_full_name, default_branch, username): 
+    
     headers = get_github_headers()
     
     # README
@@ -115,8 +152,11 @@ def get_repo_details(repo_full_name, default_branch):
         all_paths = [item["path"] for item in tree_data.get("tree", []) if item.get("type") == "blob"]
     tree_structure = "\n".join(all_paths[:500]) if all_paths else "Tree unreadable."
 
-    # Sample source files
-    code_samples = _sample_source_files(repo_full_name, default_branch, all_paths, headers)
+    # ── THE FINGERPRINT INJECTION ──
+    user_files = get_user_file_fingerprint(repo_full_name, username, headers)
+
+    # Sample source files (passing user_files down)
+    code_samples = _sample_source_files(repo_full_name, default_branch, all_paths, headers, user_files)
     return readme, tree_structure, code_samples
 
 def _file_relevance_score(path):
@@ -131,11 +171,12 @@ def _file_relevance_score(path):
     score = (depth * 2) - (hits * 15)
     return score
 
-def _sample_source_files(repo_full_name, default_branch, all_paths, headers):
+def _sample_source_files(repo_full_name, default_branch, all_paths, headers, user_files): # Added user_files
     candidates = [
         p for p in all_paths
         if p.lower().endswith(KEY_FILE_EXTENSIONS)
         and not any(skip in p for skip in SKIP_FILE_PATTERNS)
+        and (not user_files or p in user_files) # ── THE FILTER: Must be in fingerprint
     ]
     
     # Sort by our heuristic engine
@@ -296,7 +337,8 @@ def _evaluate_single_repo(repo_api, state):
     default_branch = repo_api["default_branch"]
 
     print(f"△ Evaluating: {repo_name}")
-    readme, tree, code_samples = get_repo_details(repo_full_name, default_branch)
+    username= state.get("github_username")
+    readme, tree, code_samples = get_repo_details(repo_full_name, default_branch, username)
     scores, feedback, model_used = evaluate_repo_with_llm(readme, tree, code_samples)
     print(f"  Scored by {model_used}")
 
