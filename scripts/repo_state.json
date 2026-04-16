@@ -1,4 +1,74 @@
 {
   "github_username": "ArunPrakash2901",
-  "repositories": {}
+  "repositories": {
+    "Mortality_prediction_ICU_data": {
+      "pushed_at": "2026-04-15T07:55:41Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T02:49:24.610973+00:00",
+      "scores": {
+        "analytics_eda": 90,
+        "statistical_reasoning": 85,
+        "machine_learning": 95,
+        "data_engineering": 80,
+        "cloud_infrastructure": 20,
+        "visualisation_bi": 70,
+        "communication": 85
+      },
+      "qualitative_feedback": [
+        "Code organization and documentation are good, but some scripts seem redundant.",
+        "Feature engineering is extensive and well-documented.",
+        "Model selection and hyperparameter tuning are well-performed.",
+        "Usage of SHAP values for interpretability is appreciated.",
+        "Presentation and report files are well-structured and informative.",
+        "No direct evidence of cloud infrastructure usage is seen in the provided files.",
+        "README is comprehensive and easy to follow.",
+        "Commit history is not provided, but the overall code structure suggests regular updates."
+      ]
+    },
+    "Melbourne-Oil-Scarcity-outlook": {
+      "pushed_at": "2026-04-08T10:03:33Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T02:49:26.185919+00:00",
+      "scores": {
+        "analytics_eda": 80,
+        "statistical_reasoning": 40,
+        "machine_learning": 20,
+        "data_engineering": 70,
+        "cloud_infrastructure": 10,
+        "visualisation_bi": 60,
+        "communication": 50
+      },
+      "qualitative_feedback": [
+        "The repository appears to be focused on data ingestion and EDA, with some data visualization.",
+        "No machine learning models are present in the provided code.",
+        "The code utilizes pandas and various data manipulation techniques, indicating a focus on data engineering.",
+        "Cloud infrastructure is not explicitly utilized, but data is stored locally in parquet format.",
+        "Visualizations are created using matplotlib, seaborn, and plotly, indicating a moderate level of visualization complexity.",
+        "Communication and documentation are minimal, with only a brief README and some comments in the code."
+      ]
+    },
+    "Estimation_GSP": {
+      "pushed_at": "2025-11-03T06:05:12Z",
+      "scored_by": "groq-llama-3.3-70b",
+      "scored_at": "2026-04-16T02:49:42.288680+00:00",
+      "scores": {
+        "analytics_eda": 80,
+        "statistical_reasoning": 70,
+        "machine_learning": 40,
+        "data_engineering": 90,
+        "cloud_infrastructure": 10,
+        "visualisation_bi": 60,
+        "communication": 80
+      },
+      "qualitative_feedback": [
+        "The project utilizes a declarative pipeline with 'targets' library, which aids in reproducing and maintaining the workflow.",
+        "Utilization of 'readabs' and 'readrba' libraries simplifies data acquisition from Australian Bureau of Statistics and Reserve Bank of Australia.",
+        "Implementation of a registry for series ID and metadata enhances data handling and traceability.",
+        "Employment of 'ggplot2' and other visualization tools helps in creating informative and engaging reports.",
+        "Absence of explicit machine learning components, instead relying on statistical methods and data manipulation.",
+        "Data pipeline documentation and comments provide clear understanding of the project's workflow and intentions.",
+        "Extensive use of Quarto for presentation and reporting, indicating a focus on communication and visualization."
+      ]
+    }
+  }
 }
