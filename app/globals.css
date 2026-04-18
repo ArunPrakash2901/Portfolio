@@ -17,10 +17,22 @@
   --font-serif: var(--font-dm-serif), ui-serif, Georgia, serif;
 
   --animate-ticker: ticker 28s linear infinite;
+  --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
   
   @keyframes ticker {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   @keyframes pulse-wave {
@@ -35,6 +47,14 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   @apply text-text-primary font-serif font-normal;
+}
+
+.reveal-step {
+  opacity: 0;
+}
+
+.reveal-step.in-view {
+  animation: fade-in-up 0.7s ease-out forwards;
 }
 
 /* Subtle Music Wave Equalizer Animation */
@@ -57,4 +77,17 @@ figure[data-rehype-pretty-code-figure] code {
 
 figure[data-rehype-pretty-code-figure] code span {
   color: #5A5650 !important;
+}
+
+/* Scrollytelling Image Masking - Asymmetric Fading */
+.mask-scrolly {
+  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+  .mask-scrolly {
+    mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+  }
 }
