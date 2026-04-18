@@ -72,7 +72,7 @@ export default async function WorkProjectPage({ params }: Props) {
   return (
     <main className="w-full flex-1 flex flex-col">
       <div className="flex items-center gap-2 px-3 py-1.5 bg-[#EFEBE3] border-b-[0.5px] border-[#E0DAD0] text-[10px] font-medium tracking-[0.12em] uppercase text-[#999999]">
-        work / {project.domain[0]?.toLowerCase() || 'project'}
+        projects / {project.domain[0]?.toLowerCase() || 'project'}
       </div>
 
       <article className="bg-[#F7F4EF] p-8 md:p-12 lg:p-16 max-w-4xl mx-auto w-full">
