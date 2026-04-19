@@ -4,8 +4,6 @@ const project = {
   oneLiner: "Real-time scarcity outlook dashboard for Melbourne metropolitan traffic.",
   status: "Active",
   builtDate: "2023-11",
-  timeSpent: "3 weeks",
-  difficulty: 6,
   stack: ["TypeScript", "Next.js", "D3.js", "PostgreSQL"],
   githubUrl: "https://github.com/ArunPrakash2901/melbourne-traffic",
   why: "To visualize traffic congestion patterns and predict scarcity in parking/lane availability.",
@@ -20,3 +18,4 @@ const project = {
 };
 
 export default project;
+

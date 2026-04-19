@@ -4,8 +4,6 @@ const project = {
   oneLiner: "Automated pipelines for high-frequency economic indicator tracking.",
   status: "Completed",
   builtDate: "2024-01",
-  timeSpent: "6 weeks",
-  difficulty: 9,
   stack: ["Python", "SQL", "Statsmodels", "AWS Lambda"],
   githubUrl: "https://github.com/ArunPrakash2901/treasury-nowcast",
   why: "To provide real-time estimates of economic growth before official quarterly releases.",
@@ -20,3 +18,4 @@ const project = {
 };
 
 export default project;
+

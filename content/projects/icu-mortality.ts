@@ -4,8 +4,6 @@ const project = {
   oneLiner: "Predicting patient outcomes using high-frequency physiological data.",
   status: "Completed",
   builtDate: "2024-03",
-  timeSpent: "4 weeks",
-  difficulty: 8,
   stack: ["Python", "Scikit-Learn", "Pandas", "XGBoost"],
   githubUrl: "https://github.com/ArunPrakash2901/icu-mortality",
   why: "To bridge the gap between raw medical sensor data and actionable clinical insights.",
@@ -20,3 +18,4 @@ const project = {
 };
 
 export default project;
+
