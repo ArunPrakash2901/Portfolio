@@ -2,12 +2,18 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import MusicRedirectModal from './MusicRedirectModal';
 
 const NAV_SECTIONS = ['hero', 'projects', 'built-for-fun', 'blog'] as const;
 type Section = (typeof NAV_SECTIONS)[number];
 
-export default function NavBar() {
+interface NavBarProps {
+  onContactClick: () => void;
+}
+
+export default function NavBar({ onContactClick }: NavBarProps) {
   const [activeSection, setActiveSection] = useState<Section | null>(null);
+  const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -35,16 +41,6 @@ export default function NavBar() {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  const handlePlayClick = () => {
-    const el = document.getElementById('built-for-fun');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-    setTimeout(() => {
-      window.open('https://www.instagram.com/requiem_aeternam_2025', '_blank');
-    }, 1000);
-  };
-
   const linkClass = (section: Section) =>
     `text-[13px] transition-colors ${
       activeSection === section
@@ -56,6 +52,11 @@ export default function NavBar() {
 
   return (
     <div className="sticky top-0 z-50 bg-[#F7F4EF] rounded-t-xl">
+      <MusicRedirectModal
+        isOpen={isMusicModalOpen}
+        onClose={() => setIsMusicModalOpen(false)}
+        instaUrl="https://www.instagram.com/requiem_aeternam_2025"
+      />
       <header className="flex items-center justify-between px-8 py-4 border-b-[0.5px] border-[#E0DAD0]">
         <Link href="/#hero" className={`font-serif text-base transition-colors ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}>
           ~/arun-k
@@ -72,7 +73,7 @@ export default function NavBar() {
           </Link>
           <div className="flex items-center gap-3 ml-2">
             <button
-              onClick={handlePlayClick}
+              onClick={() => setIsMusicModalOpen(true)}
               className={ctaClass}
             >
               <span className="flex items-center gap-1.5">
@@ -83,17 +84,18 @@ export default function NavBar() {
               </span>
             </button>
             <Link
-              href="/resume.pdf"
+              href="/arun-krishnasamy-resume.pdf"
+              target="_blank"
               className={ctaClass}
             >
               CV
             </Link>
-            <Link
-              href="mailto:contact@arun.dev"
+            <button
+              onClick={onContactClick}
               className={ctaClass}
             >
               Contact me
-            </Link>
+            </button>
           </div>
         </nav>
       </header>
