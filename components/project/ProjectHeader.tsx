@@ -1,26 +1,59 @@
 export default function ProjectHeader({ project }: { project: any }) {
   return (
-    <header className="px-8 py-16 md:px-12 md:py-24 max-w-5xl mx-auto border-b border-[#E0DAD0]">
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-3 text-[11px] font-bold tracking-[0.2em] uppercase text-[#9B8B6E]">
-          <span>{project.builtDate}</span>
-          <span className="w-1 h-1 rounded-full bg-[#D4C9B8]"></span>
-          <span>{project.status}</span>
-        </div>
-        <h1 className="font-serif text-[48px] md:text-[72px] leading-[1.1] text-[#1A1814] -ml-1">
+    <div className="flex h-full flex-col justify-center gap-8 bg-[#F7F4EF]">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="inline-flex items-center rounded-full border-[0.5px] border-[#E0DAD0] bg-white px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-[#9B8B6E]">
+          {project.status}
+        </span>
+        {project.builtDate && (
+          <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#9B8B6E]">
+            Built {project.builtDate}
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <h1 className="font-serif text-4xl text-[#1A1814] md:text-5xl">
           {project.name}
         </h1>
-        <p className="text-[20px] md:text-[24px] text-[#5A5650] leading-[1.5] max-w-2xl font-light italic">
+        <p className="max-w-xl text-lg italic leading-relaxed text-[#5A5650]">
           {project.oneLiner}
         </p>
-        <div className="flex gap-2 flex-wrap mt-4">
-          {project.stack.map((tech: string) => (
-            <span key={tech} className="font-mono text-[10px] border border-[#D4C9B8] rounded px-2.5 py-1 text-[#5A5650] uppercase tracking-wider bg-[#F7F4EF]">
-              {tech}
-            </span>
-          ))}
-        </div>
       </div>
-    </header>
+
+      <div className="flex flex-wrap gap-2">
+        {project.stack.map((item: string) => (
+          <span
+            key={item}
+            className="rounded-full border-[0.5px] border-[#E0DAD0] bg-[#EFEBE3] px-3 py-1.5 font-mono text-[11px] text-[#9B8B6E] uppercase tracking-widest"
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        {project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg bg-[#1A1814] px-5 py-2.5 text-sm font-medium text-[#F7F4EF] transition-all hover:opacity-90"
+          >
+            Live App ↗
+          </a>
+        )}
+        {project.githubUrl && (
+          <a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg border-[0.5px] border-[#E0DAD0] px-5 py-2.5 text-sm font-medium text-[#5A5650] transition-all hover:bg-white"
+          >
+            GitHub ↗
+          </a>
+        )}
+      </div>
+    </div>
   );
 }
