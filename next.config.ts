@@ -16,6 +16,14 @@ class VeliteWebpackPlugin {
 
 const nextConfig: NextConfig = {
   turbopack: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
   webpack: (config) => {
     config.plugins.push(new VeliteWebpackPlugin());
     config.resolve.alias = {
