@@ -30,6 +30,14 @@ export default async function Home() {
   // Velite posts for the blog section
   const writingPosts = veliteProjects.filter(p => p.category === 'Writing');
 
+  const tickerItems = [
+    { label: "Now reading", value: "" },
+    { label: "Working on", value: "" },
+    { label: "Learning", value: "" },
+    { label: "Exploring", value: "" },
+    { label: "Open to", value: "graduate roles · internships · freelance" }
+  ];
+
   return (
     <main className="w-full flex-1 flex flex-col">
       
@@ -38,30 +46,12 @@ export default async function Home() {
         <div className="flex whitespace-nowrap animate-[ticker_28s_linear_infinite]">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="contents">
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Now reading <span className="text-[#D4C9B8] font-medium">Designing Data-Intensive Applications</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Building <span className="text-[#D4C9B8] font-medium">churn prediction model in sklearn</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Learning <span className="text-[#D4C9B8] font-medium">dbt Core + Airflow orchestration</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Unwinding with <span className="text-[#C4B99F] italic">piano covers on Instagram</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Exploring <span className="text-[#D4C9B8] font-medium">Bayesian A/B testing frameworks</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
-                <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
-                Open to <span className="text-[#D4C9B8] font-medium">graduate roles · internships · freelance</span>
-              </span>
+              {tickerItems.map((item, idx) => (
+                <span key={idx} className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
+                  <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
+                  {item.label} <span className="text-[#D4C9B8] font-medium">{item.value}</span>
+                </span>
+              ))}
             </div>
           ))}
         </div>

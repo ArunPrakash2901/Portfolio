@@ -83,10 +83,25 @@ export default function ProcessSection() {
       className="relative transition-colors duration-1000 ease-in-out"
       style={{ backgroundColor: STEPS[activeStep].bgColor }}
     >
+      <div className="p-8 md:p-12 md:pb-8">
+        <h2 
+          className="font-serif text-[28px] md:text-[36px] m-0 transition-colors duration-700"
+          style={{ color: STEPS[activeStep].textColor }}
+        >
+          How I deal with data problems
+        </h2>
+        <p 
+          className="text-[12px] md:text-[14px] italic mt-1 transition-colors duration-700"
+          style={{ color: STEPS[activeStep].textColor, opacity: 0.7 }}
+        >
+          my approach to thinking, modeling, and delivering
+        </p>
+      </div>
+
       <div ref={containerRef} className="flex flex-col md:flex-row min-h-screen">
         
         {/* Visual Side: Sticky Images with Asymmetric Masking */}
-        <div className="md:w-1/2 h-[50vh] md:h-screen sticky top-0 flex items-center justify-center overflow-hidden order-1 md:order-2">
+        <div className="md:w-1/2 h-[35vh] md:h-screen sticky top-0 flex items-center justify-center overflow-hidden order-1 md:order-2 z-10">
            <div className="mask-scrolly relative w-full h-full">
              <AnimatePresence mode="wait">
                <motion.div
@@ -109,7 +124,7 @@ export default function ProcessSection() {
           {STEPS.map((step, i) => (
             <div 
               key={i} 
-              className="min-h-screen flex flex-col justify-center p-8 md:p-24"
+              className="min-h-[60vh] md:min-h-screen flex flex-col justify-center p-8 md:p-24 py-12 md:py-0"
             >
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -118,24 +133,24 @@ export default function ProcessSection() {
                 transition={{ duration: 0.6 }}
               >
                 <div 
-                  className="font-serif text-[120px] leading-none mb-4 transition-colors duration-700"
+                  className="font-serif text-[80px] md:text-[120px] leading-none mb-2 md:mb-4 transition-colors duration-700"
                   style={{ color: step.accentColor, opacity: 0.15 }}
                 >
                   {step.num}
                 </div>
                 <h3 
-                  className="font-serif text-[42px] mb-8 leading-[1.1] transition-colors duration-700"
+                  className="font-serif text-[32px] md:text-[42px] mb-6 md:mb-8 leading-[1.1] transition-colors duration-700"
                   style={{ color: step.textColor }}
                 >
                   {step.title}
                 </h3>
                 <div 
-                  className="text-[20px] leading-[1.6] max-w-[440px] transition-colors duration-700"
+                  className="text-[18px] md:text-[20px] leading-[1.6] max-w-[440px] transition-colors duration-700"
                   style={{ color: step.textColor, opacity: 0.8 }}
                 >
                   {step.desc} 
                   <span 
-                    className="block mt-8 border-l-2 pl-8 italic font-medium text-[18px]"
+                    className="block mt-6 md:mt-8 border-l-2 pl-6 md:pl-8 italic font-medium text-[16px] md:text-[18px]"
                     style={{ borderColor: step.accentColor, color: step.accentColor }}
                   >
                     {step.highlight}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { ResponsiveRadar } from '@nivo/radar'
 
 interface RadarData {
@@ -14,20 +15,32 @@ interface RadarChartProps {
 }
 
 export default function RadarChart({ data }: RadarChartProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <div className="w-full h-[400px]">
+    <div className="w-full h-[320px] md:h-[400px]">
       <ResponsiveRadar
         data={data}
         keys={['score']}
         indexBy="competency"
         maxValue={100}
-        margin={{ top: 50, right: 80, bottom: 50, left: 80 }}
+        margin={isMobile 
+          ? { top: 40, right: 40, bottom: 40, left: 40 } 
+          : { top: 60, right: 80, bottom: 60, left: 80 }
+        }
         curve="linearClosed"
         borderWidth={1.5}
         borderColor="#9B8B6E"
         gridLevels={5}
         gridShape="circular"
-        gridLabelOffset={24}
+        gridLabelOffset={isMobile ? 12 : 24}
         enableDots={true}
         dotSize={4}
         dotColor="#F7F4EF"
@@ -42,7 +55,7 @@ export default function RadarChart({ data }: RadarChartProps) {
           background: "transparent",
           text: {
             fill: "#5A5650",
-            fontSize: 10,
+            fontSize: isMobile ? 9 : 10,
             fontFamily: "var(--font-dm-sans), sans-serif",
           },
           grid: {

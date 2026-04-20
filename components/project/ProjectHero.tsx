@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 const customArtifactComponents = {
-  YinYangCanvas: dynamic(() => import('@/components/experiments/YinYangCanvas')),
 } as const;
 
 export default function ProjectHero({ project }: { project: any }) {
@@ -92,7 +91,7 @@ export default function ProjectHero({ project }: { project: any }) {
 
           {/* Right Column: Artifact */}
           <div className="rounded-2xl bg-stone-100 p-2">
-            <div className="relative aspect-video overflow-hidden rounded-[1.25rem] border border-stone-200/80 bg-white">
+            <div className="relative aspect-square md:aspect-video overflow-hidden rounded-[1.25rem] border border-stone-200/80 bg-white">
               {CustomComponent ? (
                 <div className="h-full w-full">
                   <CustomComponent />
