@@ -1,23 +1,28 @@
 const project = {
   slug: "yin-yang-generator",
-  name: "Algorithmic Yin Yang",
-  oneLiner: "A study in geometric sequencing and spatial coordinate management using pure Python Turtle graphics.",
-  status: "live",
-  builtDate: "2024",
-  stack: ["Python", "Turtle Graphics", "Algorithmic Geometry"],
-  githubUrl: "https://github.com/ArunPrakash2901/python-mini-projects",
+  name: "Yin Yang",
+  oneLiner: "Twenty lines of pure Turtle Graphics — drawn the old school way, no AI, no shortcuts.",
+  status: "completed",
+  builtDate: "2025-01",
+  stack: ["Python", "Turtle Graphics"],
+  githubUrl: "https://github.com/ArunPrakash2901/Python-practice-Fun-way-/blob/master/YinYang.py",
   customComponent: "YinYangCanvas",
-  why: "This project was born out of a personal 'No GenAI' challenge. I wanted to step away from LLM-assisted coding and force myself back into raw problem-solving by reading official documentation and manually calculating geometric paths without a visual editor.",
-  hard: "The most difficult aspect was the sequential nature of Turtle Graphics. Without a visual canvas editor, I had to mentally map the turtle's orientation and position across multiple semi-circular paths, ensuring that 'begin_fill' and 'end_fill' calls were perfectly nested to create the interlocking composite shapes.",
-  differently: "I would refactor the script to be fully parameterized, allowing it to accept dynamic user inputs for size, color palettes, and animation speeds, perhaps even evolving it into a generative art tool with randomized geometric variations.",
+  media: "/images/yinyang.png",
+  why: "I gave myself a simple constraint: no AI assistance, no autocomplete, just the official documentation and my own reasoning. What started as a small discipline exercise became something more clarifying. Working through each arc manually, mentally tracking the turtle's heading across three nested circles — forced a kind of attention I hadn't used in a while. I came away with more respect for the people who built things this way before any of these tools existed.",
+  hard: "Turtle Graphics is sequential and stateless in your mental model, you have to carry the turtle's orientation in your head across every move. Getting `begin_fill` and `end_fill` to nest correctly across multiple arcs, and then repositioning for the eye circles without drawing stray lines, required actually understanding the coordinate system rather than guessing and checking.",
+  differently: "Make it fully parameterised, dynamic size, colour palettes, animation speed. There's a generative art tool in here if you let the geometry vary. The bones are already clean enough.",
   notes: [
     {
-      title: "Path Sequencing",
-      body: "The core shape is constructed using a specific sequence of circular arcs: radius/2 for the inner curves and the full radius for the outer boundary, requiring precise management of the turtle's heading to maintain continuity."
+      title: "Twenty lines is the whole thing",
+      body: "The yin yang is three circle calls per half — radius/2 for the inner curves, the full radius for the outer boundary, radius/5 for the eye. The sequence and the heading management between them is where all the complexity lives."
     },
     {
-      title: "Coordinate Teleportation",
-      body: "I utilized the 'teleport' function to reposition the turtle for the 'eye' circles without drawing connecting lines, a technique that requires a solid grasp of the absolute Cartesian coordinate system relative to the center of the canvas."
+      title: "teleport() does the invisible work",
+      body: "Repositioning the turtle for each eye circle without drawing a connecting line requires teleport() rather than goto(). A small thing, but you only know it exists if you read the docs rather than asking something to read them for you."
+    },
+    {
+      title: "Personal Note: On AI and losing depth",
+      body: "The endeavor of doing it the old school way was eye-opening and made me realise how profound and great people were at that time in the programming space. As I was tackling obstacles, I was gaining more perspective in terms of scope and overall awareness of the module I was using. It is truly fascinating that we are living in this age of AI; however, we are losing depth in whatever we are doing, which is taken care of by AI. It is a double-edged sword, and one cannot catch it when it is mid-air."
     }
   ]
 };

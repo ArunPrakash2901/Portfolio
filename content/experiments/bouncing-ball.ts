@@ -1,28 +1,33 @@
 const project = {
   slug: "bouncing-ball",
-  name: "Kinematic Canvas",
-  oneLiner: "Hand-rolling a 2D physics engine to explore boundary collisions and kinematic animation loops.",
-  status: "live",
-  builtDate: "2024",
-  stack: ["Python", "Tkinter", "Turtle Graphics", "Kinematics"],
-  githubUrl: "https://github.com/ArunPrakash2901/python-mini-projects",
-  media: ["/images/ball-sim.gif"],
-  why: "Driven by the desire to understand the raw mathematics of physics engines, I avoided third-party libraries to implement boundary collision logic from scratch. This project served as a deep dive into bridging UI frameworks like Tkinter with real-time animation loops.",
-  hard: "The primary technical hurdle was calculating the intersection between a linear trajectory and a circular boundary. Implementing the trigonometry to keep the ball strictly within the radius R while maintaining a smooth animation frame rate required careful optimization of the 'ontimer' event loop.",
-  differently: "I would decouple the physics calculations from the rendering logic. By making the engine 'headless,' I could run simulations at higher speeds than the UI refresh rate, allowing for more complex multi-ball collisions and automated unit testing of the collision math.",
+  name: "Ball simulation",
+  oneLiner: "A random walk where a ball travels to the boundary wall each frame; built to understand circular geometry and non-blocking animation loops.",
+  status: "completed",
+  builtDate: "2025-02",
+  stack: ["Python", "Turtle", "Tkinter"],
+  githubUrl: "https://github.com/ArunPrakash2901/Python-practice-Fun-way-/blob/master/ball_simulation.py",
+  linkedInPostUrl: "https://www.linkedin.com/posts/apkrishnasamy_datascience-learninginpublic-freshersjourney-activity-7437421812126420992-qMvd?utm_source=share&utm_medium=member_desktop&rcm=ACoAACkKbPIB7vRg4DCEjuleeiPs-FP8i2CGzvs",
+  media: "/images/ball.gif",
+  why: "I wanted to understand how real-time animation loops work without a game engine doing the work for me. Turtle and Tkinter are humble tools, which meant every frame, every button, and every coordinate had to be reasoned through manually.",
+  hard: "The ball's starting position uses the square root method for uniform distribution inside a circle, without it, positions cluster toward the centre. Getting that right, and then separately solving the quadratic to find exactly where a ray from the ball's position hits the circular wall, were the two moments where the math stopped being abstract.",
+  differently: "Decouple the physics from the renderer entirely. Right now the simulation speed is tied to the UI refresh rate. A headless physics layer would let you run the math faster than the screen can draw, which opens up 'multi-ball simulations' and makes the collision logic actually testable.",
   notes: [
     {
-      title: "Circular Boundary Math",
-      body: "Collisions are handled by solving the quadratic distance between the ball's (x, y) coordinates and the circle's perimeter, ensuring the ball never 'leaks' outside the boundary regardless of its velocity."
+      title: "It's not bouncing, rather it's a random walk to the wall",
+      body: "Each frame the ball picks a random angle, calculates the distance to the boundary in that direction using a quadratic, and jumps there. move_speed = 1.0 means it always travels the full distance. The result looks like bouncing but the mechanism is completely different."
     },
     {
-      title: "Non-Blocking Event Loop",
-      body: "To keep the UI responsive while animating, I used the Turtle 'ontimer' method. This schedules the next frame without blocking the main Tkinter thread, allowing the control buttons to remain interactive during the simulation."
+      title: "Uniform placement via square root sampling",
+      body: "Placing the ball at a random position inside a circle naively, `random r`, `random theta`,  produces clustering near the centre. Sampling r as `sqrt(random)` corrects the distribution so the ball is equally likely to appear anywhere inside the boundary."
     },
     {
-      title: "The Power of Raw Documentation",
-      body: "This project reinforced the value of reading standard library docs. Eschewing GenAI tools forced me to understand the underlying 'under-the-hood' mechanics of how Turtle manages its screen state and coordinate transformations."
-    }
+      title: "Ontimer instead of a blocking loop",
+      body: "The animation uses Turtle's ontimer to schedule the next frame rather than a while loop. This keeps the Tkinter thread free, which is why the Start, Stop, and Reset buttons stay responsive during the simulation."
+    },
+    {
+      title: "Personal Note: On AI and losing depth",
+      body: "The  endeavor of  doing it the old school way, was eye-opening, and made me realise how profound and great people were at that time in the programming space. As I was tackling obstacles, I was gaining more perspective, in terms of scope and overall awareness of the module  I was using. It is truly fascinating that we are living in this age of AI, however we are losing depth in whatever we are doing, which is taken care of AI. It is a double edged sword and one cannot catch it when it is mid-air."
+    },
   ]
 };
 

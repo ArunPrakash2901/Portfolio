@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { projects as veliteProjects } from '#velite';
 import RadarChart from '@/components/RadarChart';
+import CompassHeader from '@/components/CompassHeader';
 import Image from 'next/image';
 import LiveTelemetry from '@/components/LiveTelemetry';
 import ProcessSection from '@/components/ProcessSection';
@@ -102,22 +103,9 @@ export default async function Home() {
 
       {/* Competency Map */}
       <section className="bg-[#F7F4EF] p-8 md:p-12">
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <div className="flex items-center gap-3">
-              <h2 className="font-serif text-[28px] text-[#1A1814] m-0">The Data Professional Compass</h2>
-              <Link 
-                href="/blog/competency-breakdown" 
-                className="group flex items-center justify-center w-5 h-5 rounded-full border border-[#D4C9B8] text-[#9B8B6E] hover:border-[#1A1814] hover:text-[#1A1814] transition-all"
-                title="Learn more about my scoring methodology"
-              >
-                <span className="text-[10px] font-serif italic">i</span>
-              </Link>
-            </div>
-            <p className="text-[12px] text-[#9B8B6E] italic mt-1">honest, self-assessed · hover each axis for breakdown</p>
-          </div>
-        </div>
+        <CompassHeader />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+
           <div className="flex justify-center -mx-8 md:mx-0">
              <RadarChart data={radarData} />
           </div>

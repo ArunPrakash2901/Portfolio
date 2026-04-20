@@ -20,7 +20,13 @@ export default function ProjectHero({ project }: { project: any }) {
           {/* Left Column: Content */}
           <div className="flex flex-col gap-8">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center rounded-full border border-stone-300 bg-white px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-stone-500">
+              <span className={`inline-flex items-center rounded-full border border-stone-300 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] ${project.status.toLowerCase() === 'live' ? 'bg-[#1A1814] text-[#D4C9B8] border-none' : 'bg-white text-stone-500'}`}>
+                {project.status.toLowerCase() === 'live' && (
+                  <span className="mr-2 flex h-1.5 w-1.5 items-center justify-center">
+                    <span className="absolute inline-flex h-1.5 w-1.5 animate-ping rounded-full bg-[#4CAF7E] opacity-75"></span>
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#4CAF7E]"></span>
+                  </span>
+                )}
                 {project.status}
               </span>
               {project.builtDate && (
@@ -59,6 +65,16 @@ export default function ProjectHero({ project }: { project: any }) {
                   className="rounded-lg bg-stone-900 px-5 py-2.5 text-sm font-medium text-stone-50 transition-all hover:bg-stone-800 hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Live App ↗
+                </a>
+              )}
+              {project.linkedInPostUrl && (
+                <a
+                  href={project.linkedInPostUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-[#0A66C2] px-5 py-2.5 text-sm font-medium text-[#0A66C2] transition-all hover:bg-[#0A66C2]/5 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  LinkedIn Post ↗
                 </a>
               )}
               {project.githubUrl && (

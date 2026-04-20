@@ -16,6 +16,11 @@ interface Experiment {
 export default function BuiltForFunList({ experiments }: { experiments: Experiment[] }) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  const getYear = (dateStr: string) => {
+    if (!dateStr) return '';
+    return dateStr.includes('-') ? dateStr.split('-')[0] : dateStr;
+  };
+
   return (
     <div className="flex flex-col border-t border-[#E0DAD0]">
       {experiments.map((project, index) => (
@@ -32,7 +37,7 @@ export default function BuiltForFunList({ experiments }: { experiments: Experime
                 {project.name}
               </span>
               <span className="text-[13px] text-[#9B8B6E] w-12 shrink-0">
-                {project.builtDate.split('-')[0]}
+                {getYear(project.builtDate)}
               </span>
               <div className="flex gap-2 flex-wrap">
                 {project.stack.map((tech) => (
