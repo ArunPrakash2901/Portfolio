@@ -55,7 +55,7 @@ export default function NavBar({ onContactClick }: NavBarProps) {
       <MusicRedirectModal
         isOpen={isMusicModalOpen}
         onClose={() => setIsMusicModalOpen(false)}
-        instaUrl="https://www.instagram.com/requiem_aeternam_2025"
+        instaUrl="https://www.instagram.com/arun_prakash_007"
       />
       <header className="flex items-center justify-between px-8 py-4 border-b-[0.5px] border-[#E0DAD0]">
         <Link href="/#hero" className={`font-serif text-base transition-colors ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}>

@@ -20,7 +20,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           <Link href="https://www.linkedin.com/in/apkrishnasamy/" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">LinkedIn</Link>
           <Link href="https://github.com/ArunPrakash2901" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">GitHub</Link>
           <Link href="https://www.kaggle.com/lethargicmaster" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Kaggle</Link>
-          <Link href="https://www.instagram.com/requiem_aeternam_2025" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Instagram</Link>
+          <Link href="https://www.instagram.com/arun_prakash_007" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Instagram</Link>
         </div>
         <button 
           onClick={() => setIsContactOpen(true)}
