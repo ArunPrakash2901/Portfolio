@@ -94,7 +94,10 @@ export default function ProjectHero({ project }: { project: any }) {
             <div className="relative aspect-square md:aspect-video overflow-hidden rounded-[1.25rem] border border-stone-200/80 bg-white">
               {CustomComponent ? (
                 <div className="h-full w-full">
-                  <CustomComponent />
+                  {(() => {
+                    const Component = CustomComponent as any;
+                    return <Component />;
+                  })()}
                 </div>
               ) : project.media ? (
                 <div className="relative h-full w-full">
