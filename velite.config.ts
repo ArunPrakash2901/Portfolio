@@ -85,7 +85,7 @@ export default defineConfig({
         why: s.string().optional(),
         hard: s.string().optional(),
         differently: s.string().optional(),
-        notes: s.array(s.mixed()).optional(),
+        notes: s.array(s.union([s.string(), s.object({ title: s.string(), body: s.string() })])).optional(),
         code: s.mdx()
       })
     },
