@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Experiment {
   slug: string;
@@ -75,10 +76,12 @@ export default function BuiltForFunList({ experiments }: { experiments: Experime
                 <div className="px-8 pb-8 pt-2 flex flex-col md:flex-row gap-8 items-start">
                   {project.media && (
                     <div className="w-full md:w-[320px] aspect-video relative rounded-lg overflow-hidden bg-[#E8E1D5] border border-[#D4C9B8]">
-                      <img 
+                      <Image 
                         src={project.media} 
                         alt={project.name}
-                        className="object-cover w-full h-full"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 320px"
                       />
                     </div>
                   )}
