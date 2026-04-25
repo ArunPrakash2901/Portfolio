@@ -75,6 +75,17 @@ export default defineConfig({
         }),
         coverImage: s.string().optional(),
         summary: s.string(),
+        oneLiner: s.string().optional(),
+        status: s.string().optional(),
+        builtDate: s.string().optional(),
+        githubUrl: s.string().optional(),
+        liveUrl: s.string().optional(),
+        blogUrl: s.string().optional(),
+        linkedInPostUrl: s.string().optional(),
+        why: s.string().optional(),
+        hard: s.string().optional(),
+        differently: s.string().optional(),
+        notes: s.array(s.mixed()).optional(),
         code: s.mdx()
       })
     },

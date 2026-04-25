@@ -3,7 +3,7 @@ title: "Goldstein Electorate Geospatial Analysis"
 category: "Sandbox"
 date: "2024-04-24"
 domain: ["Geospatial Analysis", "Electoral Data", "EDA"]
-techStack: ["R", "R Markdown", "sf", "ggplot2", "dplyr", "readxl", "janitor"]
+techStack: ["R", "sf", "ggplot2", "dplyr", "readxl", "janitor"]
 competencyScores:
   analytics_eda: 68
   statistical_reasoning: 38
@@ -14,6 +14,18 @@ competencyScores:
   communication: 56
 coverImage: "/images/electorate-analysis.png"
 summary: "I overlaid AEC electorate boundaries, ABS Census layers, and referendum results to see how Goldstein sat against nearby Victorian divisions. The cropped Melbourne maps made the rent and income gradient readable quickly, with Goldstein and Kooyong standing out in the higher-value range."
+oneLiner: "I overlaid AEC electorate boundaries, ABS Census layers, and referendum results to see how Goldstein sat against nearby Victorian divisions."
+status: "Completed"
+builtDate: "2024-04"
+githubUrl: "https://github.com/ArunPrakash2901/Youth_employment_analysis"
+why: "I wanted to treat Goldstein as a map question rather than a table question, then see what changed once election results, Census structure, rent, income, and referendum results were all aligned on the same Victorian geography."
+hard: "The tricky part was getting the AEC boundary layer and the ABS geography into the same spatial frame, then assigning small Census areas to electorates before averaging the rent and income measures."
+differently: "I would finish the missing Indigenous profile section, fix the Chisholm label typo, and add clean export steps so the map outputs do not depend on notebook cache files."
+notes:
+  - "The core spatial workflow aligned the AEC boundaries with the ABS small-area geography, assigned each Census area to an electorate, and then rolled rent and income up to division level."
+  - "Using a cropped inner-Melbourne view did more analytical work than the full-state map because it made the local rent pattern around Goldstein readable straight away."
+  - "The demographic comparison added context to the maps by placing Goldstein next to Victoria rather than treating it as a standalone profile."
+  - "The unfinished edges were useful too: the Indigenous profile section never landed, one geography package was only a pointer file, and the map labels still carried a typo for Chisholm."
 ---
 
 # Goldstein Electorate Geospatial Analysis
@@ -28,7 +40,7 @@ I was not trying to make a grand electoral claim. I wanted to see whether the de
 
 ### The Data
 
-The map started with two core sources: Victorian federal electorate boundaries from the AEC, and small-area Census geography from the ABS that carried median rent and personal income measures. Those layers arrived in different coordinate systems, so part of the work was simply getting them into the same spatial frame before doing anything else.
+The map started with two core sources: Victorian federal electorate boundaries from the AEC, and small-area Census geography from the ABS that carried median rent and personal income measures. Those layers arrived in different coordinate systems, so part was simply getting them into the same spatial frame before doing anything else.
 
 For the demographic comparison, I used ABS Census community profile tables at both electorate and state level. That let me compare Goldstein with Victoria more directly instead of treating it as a one-off profile.
 

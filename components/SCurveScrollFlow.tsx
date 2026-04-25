@@ -57,22 +57,22 @@ export default function SCurveScrollFlow({ children }: SCurveScrollFlowProps) {
               strokeLinecap="round"
               opacity="0.2"
             />
-            {/* Active Drawing Path - Thin Dashed Trace */}
+            {/* Active Drawing Path - Thin Dashed Trace (Metallic Silver) */}
             <motion.path
               d={pathD}
               fill="none"
-              stroke="#5BC0CD"
-              strokeWidth="0.25"
+              stroke="#A8A29E"
+              strokeWidth="0.15"
               strokeDasharray="1 3"
               strokeLinecap="round"
               style={{ pathLength: smoothProgress }}
-              opacity="0.3"
+              opacity="0.4"
             />
           </svg>
 
-          {/* The Glowing Kinematic Ball - Small Technical Pointer */}
+          {/* The Glowing Kinematic Ball - Metallic Pointer */}
           <motion.div
-            className="absolute w-2.5 h-2.5 bg-[#5BC0CD] rounded-full shadow-[0_0_12px_rgba(91,192,205,0.3)] z-0"
+            className="absolute w-2 h-2 bg-[#A8A29E] rounded-full shadow-[0_0_10px_rgba(168,162,158,0.3)] z-0"
             style={{
               left: ballX,
               top: ballY,
@@ -82,7 +82,7 @@ export default function SCurveScrollFlow({ children }: SCurveScrollFlowProps) {
           />
         </div>
 
-        {/* Content Layer: Elevated Z-Index */}
+        {/* Content Layer: Elevated Z-Index to stay above animation */}
         <div className="relative z-10">
           <div className="prose prose-invert prose-stone max-w-none prose-headings:!text-[#F7F4EF]
             [&>hr]:hidden

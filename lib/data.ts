@@ -1,7 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-import { cache } from 'react';
-import { experiments as veliteExperiments, projects as veliteProjects } from '#velite';
+import { experiments as veliteExperiments, projects as veliteProjects, type Project } from '#velite';
 
 export type PortfolioNote = string | { title: string; body: string };
 
@@ -24,51 +21,59 @@ export type PortfolioEntry = {
   notes: PortfolioNote[];
 };
 
-export const getProjects = cache(async (): Promise<PortfolioEntry[]> => {
-  const dir = path.join(process.cwd(), 'content/projects');
-  if (!fs.existsSync(dir)) return [];
+function mapProjectToEntry(project: Project): PortfolioEntry {
+  return {
+    slug: project.slug.replace('projects/', ''),
+    name: project.title,
+    oneLiner: project.oneLiner || project.summary,
+    status: project.status || 'Completed',
+    builtDate: project.builtDate || project.date.split('-').slice(0, 2).join('-'),
+    stack: project.techStack,
+    githubUrl: project.githubUrl,
+    liveUrl: project.liveUrl,
+    blogUrl: project.blogUrl,
+    linkedInPostUrl: project.linkedInPostUrl,
+    media: project.coverImage,
+    why: project.why || '',
+    hard: project.hard || '',
+    differently: project.differently || '',
+    notes: (project.notes as PortfolioNote[]) || [],
+  };
+}
 
-  const files = fs.readdirSync(dir).filter((file) => file.endsWith('.ts'));
-  const projects = await Promise.all(
-    files.map(async (file) => {
-      const contentModule = await import(
-        /* webpackInclude: /\.ts$/ */
-        `@/content/projects/${file}`
-      );
-      return contentModule.default as PortfolioEntry;
-    })
-  );
+export async function getProjects(): Promise<PortfolioEntry[]> {
+  return veliteProjects
+    .filter((p) => p.category !== 'Writing')
+    .map(mapProjectToEntry);
+}
 
-  return projects;
-});
+export async function getExperiments(): Promise<PortfolioEntry[]> {
+  // Experiments are still primarily .ts files for now, or we can migrate them too.
+  // Given the performance goal, let's keep them as is or use velite if available.
+  return veliteExperiments.map((e) => ({
+    slug: e.slug.replace('experiments/', ''),
+    name: e.title,
+    oneLiner: e.summary,
+    status: 'Experimental',
+    builtDate: e.date.split('-').slice(0, 2).join('-'),
+    stack: [],
+    why: '',
+    hard: '',
+    differently: '',
+    notes: [],
+    media: '',
+  }));
+}
 
-export const getExperiments = cache(async (): Promise<PortfolioEntry[]> => {
-  const dir = path.join(process.cwd(), 'content/experiments');
-  if (!fs.existsSync(dir)) return [];
+export async function getProjectBySlug(slug: string) {
+  const project = veliteProjects.find((p) => p.slug === `projects/${slug}`);
+  return project ? mapProjectToEntry(project) : undefined;
+}
 
-  const files = fs.readdirSync(dir).filter((file) => file.endsWith('.ts'));
-  const experiments = await Promise.all(
-    files.map(async (file) => {
-      const contentModule = await import(
-        /* webpackInclude: /\.ts$/ */
-        `@/content/experiments/${file}`
-      );
-      return contentModule.default as PortfolioEntry;
-    })
-  );
-
-  return experiments;
-});
-
-export const getProjectBySlug = cache(async (slug: string) => {
-  const projects = await getProjects();
-  return projects.find((project) => project.slug === slug);
-});
-
-export const getExperimentBySlug = cache(async (slug: string) => {
+export async function getExperimentBySlug(slug: string) {
   const experiments = await getExperiments();
   return experiments.find((experiment) => experiment.slug === slug);
-});
+}
 
 export function getProjectPostBySlug(slug: string) {
   return veliteProjects.find(
