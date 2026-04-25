@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 
 const ProcessSection = dynamic(() => import('@/components/ProcessSection'), {
+  ssr: false,
   loading: () => (
     <section className="bg-[#F7F4EF]">
       <div className="p-8 md:p-12 md:pb-8">

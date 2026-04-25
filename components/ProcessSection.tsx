@@ -107,7 +107,7 @@ export default function ProcessSection() {
         {/* Visual Side: Sticky Images with Asymmetric Masking */}
         <div className="md:w-1/2 h-[35vh] md:h-screen sticky top-0 flex items-center justify-center overflow-hidden order-1 md:order-2 z-10">
            <div className="mask-scrolly relative w-full h-full">
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={true}>
                 <motion.div
                   key={activeStep}
                   initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
@@ -120,6 +120,7 @@ export default function ProcessSection() {
                    src={STEPS[activeStep].img}
                    alt=""
                    fill
+                   priority
                    sizes="(max-width: 768px) 100vw, 50vw"
                    className="object-cover"
                  />

@@ -140,9 +140,9 @@ export default async function Home() {
 
   return (
     <main className="relative w-full flex-1 flex flex-col">
-      <div className="w-full my-8 rounded-3xl overflow-hidden shadow-sm border border-white/20">
+      <div className="w-full my-8 rounded-3xl shadow-sm border border-white/20">
         {/* Ticker Section */}
-        <div className="bg-[#1A1814] overflow-hidden py-[9px] border-b-[0.5px] border-[#2E2A25]">
+        <div className="bg-[#1A1814] overflow-hidden py-[9px] border-b-[0.5px] border-[#2E2A25] rounded-t-3xl">
           <div className="flex whitespace-nowrap animate-[ticker_28s_linear_infinite] will-change-transform">
             {[...Array(2)].map((_, i) => (
               <div key={i} className="contents">
@@ -290,7 +290,7 @@ export default async function Home() {
         <div className="h-[0.5px] bg-[#E0DAD0] w-full"></div>
 
         {/* Blog Section */}
-        <section className="bg-[#EFEBE3] p-8 md:p-12 mb-auto" id="blog">
+        <section className="bg-[#EFEBE3] p-8 md:p-12 mb-auto rounded-b-3xl" id="blog">
           <div className="mb-7">
             <h2 className="font-serif text-[28px] text-[#1A1814] m-0">Blog</h2>
             <p className="text-[12px] text-[#556E74] italic mt-1">thinking out loud about data, statistics, and the craft</p>
