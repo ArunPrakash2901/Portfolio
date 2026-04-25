@@ -26,10 +26,10 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       <footer className="bg-[#0F0D0A] px-8 py-9 flex items-center justify-between">
         <span className="font-serif text-lg text-[#F7F4EF]">Arun Krishnasamy</span>
         <div className="flex gap-6">
-          <Link href="https://www.linkedin.com/in/apkrishnasamy/" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">LinkedIn</Link>
-          <Link href="https://github.com/ArunPrakash2901" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">GitHub</Link>
-          <Link href="https://www.kaggle.com/lethargicmaster" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Kaggle</Link>
-          <Link href="https://www.instagram.com/arun_prakash_007" target="_blank" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Instagram</Link>
+          <a href="https://www.linkedin.com/in/apkrishnasamy/" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">LinkedIn</a>
+          <a href="https://github.com/ArunPrakash2901" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">GitHub</a>
+          <a href="https://www.kaggle.com/lethargicmaster" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Kaggle</a>
+          <a href="https://www.instagram.com/arun_prakash_007" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Instagram</a>
         </div>
         <button 
           onClick={() => setIsContactOpen(true)}

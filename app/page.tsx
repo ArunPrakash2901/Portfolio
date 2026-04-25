@@ -138,10 +138,6 @@ export default async function Home() {
 
   return (
     <main className="relative w-full flex-1 flex flex-col">
-      <JsonLd data={homeJsonLd} />
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <DeferredLossLandscape />
-      </div>
       <div className="w-full my-8 rounded-3xl overflow-hidden shadow-sm border border-white/20">
         {/* Ticker Section */}
         <div className="bg-[#1A1814] overflow-hidden py-[9px] border-b-[0.5px] border-[#2E2A25]">
@@ -186,8 +182,9 @@ export default async function Home() {
                 alt="Arun Krishnasamy - Data Professional"
                 fill
                 priority
+                loading="eager"
                 className="object-cover object-center grayscale-[20%] hover:grayscale-0 transition-all duration-700"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
               />
             </div>
           </div>
@@ -318,8 +315,12 @@ export default async function Home() {
              )}
           </div>
         </section>
-      </div>
+        </div>
 
-    </main>
-  );
-}
+        <JsonLd data={homeJsonLd} />
+        <div className="fixed inset-0 z-0 pointer-events-none">
+        <DeferredLossLandscape />
+        </div>
+        </main>
+        );
+        }

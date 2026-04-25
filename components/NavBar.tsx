@@ -97,13 +97,13 @@ export default function NavBar({ onContactClick }: NavBarProps) {
                 Play
               </span>
             </button>
-            <Link
+            <a
               href="/arun-krishnasamy-resume.pdf"
               target="_blank"
               className={ctaClass}
             >
               CV
-            </Link>
+            </a>
             <button
               onClick={onContactClick}
               className={ctaClass}
