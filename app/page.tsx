@@ -199,7 +199,7 @@ export default async function Home() {
           <CompassHeader />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
 
-            <div className="flex justify-center -mx-8 md:mx-0">
+            <div className="flex justify-center -mx-8 md:mx-0 max-w-full overflow-hidden">
                <DeferredRadarChart data={radarData} />
             </div>
             <div className="flex flex-col gap-[13px]">
