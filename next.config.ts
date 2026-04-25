@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
+import type { webpack } from "next/dist/compiled/webpack/webpack";
 import path from "path";
 
 class VeliteWebpackPlugin {
   static started = false;
-  apply(compiler: import('webpack').Compiler) {
+  apply(compiler: webpack.Compiler) {
     // Prevent multiple builds in watch mode
     compiler.hooks.beforeCompile.tapPromise("VeliteWebpackPlugin", async () => {
       if (VeliteWebpackPlugin.started) return;
@@ -24,10 +25,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config: import('webpack').Configuration) => {
-    const typedConfig = config as import('webpack').Configuration & {
-      plugins: NonNullable<import('webpack').Configuration['plugins']>;
-      resolve: NonNullable<import('webpack').Configuration['resolve']>;
+  webpack: (config: webpack.Configuration) => {
+    const typedConfig = config as webpack.Configuration & {
+      plugins: NonNullable<webpack.Configuration['plugins']>;
+      resolve: NonNullable<webpack.Configuration['resolve']>;
     };
 
     typedConfig.plugins.push(new VeliteWebpackPlugin());
