@@ -86,6 +86,14 @@ export default function ProjectHero({ project }: { project: any }) {
                   GitHub ↗
                 </a>
               )}
+              {project.blogUrl && (
+                <a
+                  href={project.blogUrl}
+                  className="rounded-lg border border-stone-200 px-5 py-2.5 text-sm font-medium text-stone-600 transition-all hover:bg-stone-100 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  Learn More ↗
+                </a>
+              )}
             </div>
           </div>
 
@@ -101,16 +109,47 @@ export default function ProjectHero({ project }: { project: any }) {
                 </div>
               ) : project.media ? (
                 <div className="relative h-full w-full">
-                  <Image
-                    src={project.media}
-                    alt={project.name}
-                    fill
-                    className="object-cover"
-                    style={{
-                      maskImage: 'linear-gradient(to right, transparent, black 20%)',
-                      WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%)'
-                    }}
-                  />
+                  {project.mediaMode === 'stretch-horizontal' ? (
+                    <Image
+                      src={project.media}
+                      alt={project.name}
+                      fill
+                      className="object-contain px-2 md:px-4"
+                      style={{
+                        transform: 'scaleX(1.7)',
+                        transformOrigin: 'center center'
+                      }}
+                    />
+                  ) : project.mediaMode === 'contain-with-backdrop' ? (
+                    <>
+                      <Image
+                        src={project.media}
+                        alt={project.name}
+                        fill
+                        aria-hidden="true"
+                        className="scale-110 object-cover blur-2xl"
+                        style={{ opacity: 0.35 }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/45 via-white/10 to-stone-200/30" />
+                      <Image
+                        src={project.media}
+                        alt={project.name}
+                        fill
+                        className="object-contain p-4 md:p-6"
+                      />
+                    </>
+                  ) : (
+                    <Image
+                      src={project.media}
+                      alt={project.name}
+                      fill
+                      className="object-cover"
+                      style={{
+                        maskImage: 'linear-gradient(to right, transparent, black 20%)',
+                        WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%)'
+                      }}
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="flex h-full items-center justify-center px-6 text-center font-mono text-xs uppercase tracking-[0.2em] text-stone-400">

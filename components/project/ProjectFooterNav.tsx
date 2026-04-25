@@ -18,7 +18,7 @@ export default function ProjectFooterNav({
       <div className="flex flex-col gap-1">
         {prev && (
           <>
-            <span className="font-mono text-[9px] text-[#9B8B6E] uppercase tracking-wider">previous</span>
+            <span className="font-mono text-[9px] text-[#556E74] uppercase tracking-wider">previous</span>
             <Link href={`${collectionHref}/${prev.slug}`} className="text-[13px] text-[#1A1814] hover:underline decoration-[0.5px] underline-offset-4">
               {prev.name}
             </Link>
@@ -35,7 +35,7 @@ export default function ProjectFooterNav({
       <div className="flex flex-col gap-1 items-end text-right">
         {next && (
           <>
-            <span className="font-mono text-[9px] text-[#9B8B6E] uppercase tracking-wider">next</span>
+            <span className="font-mono text-[9px] text-[#556E74] uppercase tracking-wider">next</span>
             <Link href={`${collectionHref}/${next.slug}`} className="text-[13px] text-[#1A1814] hover:underline decoration-[0.5px] underline-offset-4">
               {next.name}
             </Link>

@@ -2,11 +2,11 @@ export default function ProjectHeader({ project }: { project: any }) {
   return (
     <div className="flex h-full flex-col justify-center gap-8 bg-[#F7F4EF]">
       <div className="flex flex-wrap items-center gap-3">
-        <span className="inline-flex items-center rounded-full border-[0.5px] border-[#E0DAD0] bg-white px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-[#9B8B6E]">
+        <span className="inline-flex items-center rounded-full border-[0.5px] border-[#E0DAD0] bg-white px-3 py-1 font-mono text-[11px] uppercase tracking-[0.24em] text-[#556E74]">
           {project.status}
         </span>
         {project.builtDate && (
-          <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#9B8B6E]">
+          <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[#556E74]">
             Built {project.builtDate}
           </span>
         )}
@@ -25,7 +25,7 @@ export default function ProjectHeader({ project }: { project: any }) {
         {project.stack.map((item: string) => (
           <span
             key={item}
-            className="rounded-full border-[0.5px] border-[#E0DAD0] bg-[#EFEBE3] px-3 py-1.5 font-mono text-[11px] text-[#9B8B6E] uppercase tracking-widest"
+            className="rounded-full border-[0.5px] border-[#E0DAD0] bg-[#EFEBE3] px-3 py-1.5 font-mono text-[11px] text-[#556E74] uppercase tracking-widest"
           >
             {item}
           </span>

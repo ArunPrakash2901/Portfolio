@@ -14,7 +14,7 @@ export default function ProjectStory({ project }: { project: any }) {
             className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-[200px_1fr] last:mb-0"
           >
             <div className="flex flex-col items-start justify-start">
-              <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#9B8B6E]">
+              <span className="font-mono text-xs uppercase tracking-[0.24em] text-[#556E74]">
                 {section.label}
               </span>
             </div>
