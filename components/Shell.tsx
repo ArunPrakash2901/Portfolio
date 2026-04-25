@@ -1,12 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import NavBar from '@/components/NavBar';
-import ContactModal from '@/components/ContactModal';
 import Link from 'next/link';
-import LossLandscape from '@/components/LossLandscape';
 import { isAmbientBackgroundRoute } from '@/lib/ambientRoute';
+
+const ContactModal = dynamic(() => import('@/components/ContactModal'));
+const LossLandscape = dynamic(() => import('@/components/LossLandscape'), {
+  ssr: false,
+});
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -35,7 +39,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </button>
       </footer>
 
-      <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      {isContactOpen ? (
+        <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      ) : null}
     </div>
   );
 

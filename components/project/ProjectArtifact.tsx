@@ -30,6 +30,7 @@ export default function ProjectArtifact({ project }: { project: ProjectArtifactD
             src={project.liveUrl}
             className="h-full w-full border-none"
             title={project.name}
+            loading="lazy"
           />
         ) : project.media ? (
           <div className="relative h-full w-full">
@@ -38,6 +39,7 @@ export default function ProjectArtifact({ project }: { project: ProjectArtifactD
               alt={project.name}
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, 1200px"
             />
           </div>
         ) : (

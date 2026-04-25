@@ -140,6 +140,7 @@ function buildGrid(phase: number, pointer: PointerState): number[] {
 
 export default function LossLandscape({ className }: LossLandscapeProps) {
   const pointerRef = useRef<PointerState>(INITIAL_POINTER);
+  const compactModeRef = useRef(false);
   const reduceMotionRef = useRef(false);
   const [grid, setGrid] = useState<number[]>(() => buildGrid(0, INITIAL_POINTER));
 
@@ -161,19 +162,28 @@ export default function LossLandscape({ className }: LossLandscapeProps) {
   }, [contourGenerator, grid]);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const compactPointerQuery = window.matchMedia('(pointer: coarse)');
 
     const syncMotionPreference = () => {
-      reduceMotionRef.current = mediaQuery.matches;
+      reduceMotionRef.current = motionQuery.matches || document.hidden;
+      compactModeRef.current = compactPointerQuery.matches || window.innerWidth < 768;
     };
 
     syncMotionPreference();
-    mediaQuery.addEventListener('change', syncMotionPreference);
+    motionQuery.addEventListener('change', syncMotionPreference);
+    compactPointerQuery.addEventListener('change', syncMotionPreference);
+    document.addEventListener('visibilitychange', syncMotionPreference);
+    window.addEventListener('resize', syncMotionPreference, { passive: true });
 
     let frameId = 0;
     let lastTick = 0;
 
     const updatePointer = (event: PointerEvent) => {
+      if (compactModeRef.current) {
+        return;
+      }
+
       const x = clamp(event.clientX / window.innerWidth, 0, 1);
       const y = clamp(event.clientY / window.innerHeight, 0, 1);
 
@@ -193,7 +203,13 @@ export default function LossLandscape({ className }: LossLandscapeProps) {
     };
 
     const loop = (time: number) => {
-      if (time - lastTick >= (reduceMotionRef.current ? 220 : UPDATE_INTERVAL_MS)) {
+      const interval = reduceMotionRef.current
+        ? 260
+        : compactModeRef.current
+          ? 140
+          : UPDATE_INTERVAL_MS;
+
+      if (time - lastTick >= interval) {
         const phase = time * 0.00012;
         const nextGrid = buildGrid(phase, pointerRef.current);
         startTransition(() => {
@@ -210,7 +226,10 @@ export default function LossLandscape({ className }: LossLandscapeProps) {
     window.addEventListener('blur', clearPointer);
 
     return () => {
-      mediaQuery.removeEventListener('change', syncMotionPreference);
+      motionQuery.removeEventListener('change', syncMotionPreference);
+      compactPointerQuery.removeEventListener('change', syncMotionPreference);
+      document.removeEventListener('visibilitychange', syncMotionPreference);
+      window.removeEventListener('resize', syncMotionPreference);
       window.removeEventListener('pointermove', updatePointer);
       window.removeEventListener('blur', clearPointer);
       window.cancelAnimationFrame(frameId);

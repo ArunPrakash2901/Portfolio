@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import type { ComponentType } from 'react';
 
@@ -126,6 +124,7 @@ export default function ProjectHero({ project }: { project: ProjectHeroData }) {
                       alt={project.name}
                       fill
                       className="object-contain px-2 md:px-4"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       style={{
                         transform: 'scaleX(1.7)',
                         transformOrigin: 'center center'
@@ -139,6 +138,7 @@ export default function ProjectHero({ project }: { project: ProjectHeroData }) {
                         fill
                         aria-hidden="true"
                         className="scale-110 object-cover blur-2xl"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         style={{ opacity: 0.35 }}
                       />
                       <div className="absolute inset-0 bg-gradient-to-br from-white/45 via-white/10 to-stone-200/30" />
@@ -147,6 +147,7 @@ export default function ProjectHero({ project }: { project: ProjectHeroData }) {
                         alt={project.name}
                         fill
                         className="object-contain p-4 md:p-6"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                       />
                     </>
                   ) : (
@@ -155,6 +156,7 @@ export default function ProjectHero({ project }: { project: ProjectHeroData }) {
                       alt={project.name}
                       fill
                       className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       style={{
                         maskImage: 'linear-gradient(to right, transparent, black 20%)',
                         WebkitMaskImage: 'linear-gradient(to right, transparent, black 20%)'
