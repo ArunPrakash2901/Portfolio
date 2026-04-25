@@ -49,7 +49,7 @@ export default async function Home() {
       <div className="fixed inset-0 z-0 pointer-events-none">
         <LossLandscape />
       </div>
-      <div className="max-w-6xl mx-auto w-full my-8 rounded-3xl overflow-hidden shadow-sm border border-white/20">
+      <div className="w-full my-8 rounded-3xl overflow-hidden shadow-sm border border-white/20">
         {/* Ticker Section */}
         <div className="bg-[#1A1814] overflow-hidden py-[9px] border-b-[0.5px] border-[#2E2A25]">
           <div className="flex whitespace-nowrap animate-[ticker_28s_linear_infinite]">
