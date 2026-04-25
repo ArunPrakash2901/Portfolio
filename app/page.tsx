@@ -191,16 +191,18 @@ export default async function Home() {
         
         <div className="flex flex-col border-t-[0.5px] border-[#D4C9B8]">
            {writingPosts.length > 0 ? writingPosts.map(post => (
-             <div key={post.slug} className="flex justify-between items-center py-[18px] border-b-[0.5px] border-[#D4C9B8] group cursor-pointer hover:bg-black/5 px-2 -mx-2 transition-colors rounded-sm">
-               <div className="flex flex-col gap-1">
-                 <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#556E74]">{post.domain[0]}</span>
-                 <span className="font-serif text-[16px] text-[#1A1814] group-hover:underline decoration-[0.5px] underline-offset-4">{post.title}</span>
+             <Link key={post.slug} href={`/writing/${post.slug}`}>
+               <div className="flex justify-between items-center py-[18px] border-b-[0.5px] border-[#D4C9B8] group cursor-pointer hover:bg-black/5 px-2 -mx-2 transition-colors rounded-sm">
+                 <div className="flex flex-col gap-1">
+                   <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#556E74]">{post.domain[0]}</span>
+                   <span className="font-serif text-[16px] text-[#1A1814] group-hover:underline decoration-[0.5px] underline-offset-4">{post.title}</span>
+                 </div>
+                 <div className="flex flex-col items-end gap-1 shrink-0 ml-4">
+                   <span className="text-[11px] text-[#556E74] text-right">{post.shortDate || '2026'}</span>
+                   <span className="text-[14px] text-[#556E74] group-hover:translate-x-1 transition-transform">→</span>
+                 </div>
                </div>
-               <div className="flex flex-col items-end gap-1 shrink-0 ml-4">
-                 <span className="text-[11px] text-[#556E74] text-right">{post.shortDate || '2026'}</span>
-                 <span className="text-[14px] text-[#556E74] group-hover:translate-x-1 transition-transform">→</span>
-               </div>
-             </div>
+             </Link>
            )) : (
              <div className="py-4 text-[#556E74] text-[12px] italic border-b-[0.5px] border-[#D4C9B8]">
                No publishing history detected. Add raw `.mdx` files to `/content/projects` marked as "Writing".

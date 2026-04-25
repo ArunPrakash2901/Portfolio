@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface MusicRedirectModalProps {
   isOpen: boolean;
@@ -13,6 +14,21 @@ export default function MusicRedirectModal({
   onClose,
   instaUrl,
 }: MusicRedirectModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -27,6 +43,9 @@ export default function MusicRedirectModal({
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className="max-w-md w-full bg-stone-50 border border-stone-200 rounded-2xl p-8 relative overflow-hidden"
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Music redirect"
           >
             {/* Close Button */}
             <button

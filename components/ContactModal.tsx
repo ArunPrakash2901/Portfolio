@@ -35,6 +35,21 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -55,11 +70,15 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', duration: 0.5, bounce: 0.3 }}
             className="relative w-full max-w-4xl bg-stone-50 border border-stone-200 rounded-[2rem] shadow-2xl overflow-hidden z-10"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Contact Arun"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
               className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-200/50 transition-colors z-20 text-stone-500"
+              aria-label="Close contact modal"
             >
               <X size={20} />
             </button>
@@ -68,14 +87,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               {/* Column 1: The Pitch */}
               <div className="p-8 md:p-12 bg-stone-100/50 border-b md:border-b-0 md:border-r border-stone-200">
                 <div className="aspect-video w-full bg-stone-200 rounded-2xl overflow-hidden mb-8 shadow-inner relative group">
-                  {/* Placeholder for Video */}
-                  <iframe
-                    className="w-full h-full"
-                    src="https://www.youtube.com/embed/dQw4w9WgXcQ" // Replace with your actual unlisted YouTube/Loom URL
-                    title="Introduction Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  <p className="flex h-full items-center justify-center px-6 text-center text-sm font-light text-stone-500">
+                    Introduction video placeholder
+                  </p>
                 </div>
                 <div className="space-y-4">
                   <h3 className="font-serif text-2xl text-stone-900">Let's talk.</h3>
