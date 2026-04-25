@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://arun.dev';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://arunpk.ai';
 export const SITE_HOST = new URL(SITE_URL).host;
 export const SITE_LOCALE = 'en_AU';
 export const PERSON_NAME = 'Arun Krishnasamy';
