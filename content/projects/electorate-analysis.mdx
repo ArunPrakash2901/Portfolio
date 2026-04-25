@@ -1,0 +1,68 @@
+---
+title: "Goldstein Electorate Geospatial Analysis"
+category: "Sandbox"
+date: "2024-04-24"
+domain: ["Geospatial Analysis", "Electoral Data", "EDA"]
+techStack: ["R", "R Markdown", "sf", "ggplot2", "dplyr", "readxl", "janitor"]
+competencyScores:
+  analytics_eda: 68
+  statistical_reasoning: 38
+  machine_learning: 2
+  data_engineering: 44
+  cloud_infrastructure: 2
+  visualisation_bi: 70
+  communication: 56
+coverImage: "/images/electorate-analysis.png"
+summary: "I overlaid AEC electorate boundaries, ABS Census layers, and referendum results to see how Goldstein sat against nearby Victorian divisions. The cropped Melbourne maps made the rent and income gradient readable quickly, with Goldstein and Kooyong standing out in the higher-value range."
+---
+
+# Goldstein Electorate Geospatial Analysis
+
+I wanted to see what Goldstein looked like once election results, Census structure, and mapped socioeconomic indicators were all sitting on the same geography. The cropped Melbourne maps made the main pattern easy to read: Goldstein appeared in the higher-rent group, Kooyong sat nearby, and the inner-to-outer gradient became clearer once I stopped trying to read all of Victoria at once.
+
+### The Brief
+
+This started as an assignment question, but the part that held my attention was the spatial one. I used Goldstein as the focal electorate and compared it with Victoria-wide Census profiles, nearby Melbourne divisions, the 2022 House result tables, and the 2023 referendum result for the same division.
+
+I was not trying to make a grand electoral claim. I wanted to see whether the demographic tables and voting tables changed character once they were turned into maps, and whether Goldstein still looked distinctive when it was placed next to its neighbouring electorates rather than a national average.
+
+### The Data
+
+The map started with two core sources: Victorian federal electorate boundaries from the AEC, and small-area Census geography from the ABS that carried median rent and personal income measures. Those layers arrived in different coordinate systems, so part of the work was simply getting them into the same spatial frame before doing anything else.
+
+For the demographic comparison, I used ABS Census community profile tables at both electorate and state level. That let me compare Goldstein with Victoria more directly instead of treating it as a one-off profile.
+
+The voting side came from two AEC tables: the 2022 House result by division, and the 2023 referendum result by division. Those were joined and filtered at electorate level so Goldstein could be read alongside its demographic profile rather than as a separate sidebar.
+
+Before any spatial overlay, I had to align the AEC and ABS layers to the same coordinate system. The demographic tables also needed reshaping and cleanup so the age and income bands could be plotted cleanly.
+
+### The Spatial Work
+
+The spatial workflow ended up being the heart of the project. I started with small Census areas and the AEC electorate boundaries, then brought both into the same coordinate system so they could be compared properly.
+
+From there, I used the centre point of each small Census area to decide which electorate it belonged to. That gave me a workable bridge between the ABS geography and the AEC geography, so each small area could inherit an electorate name before I summarised anything.
+
+Once each small area carried a division label, I averaged the rent and personal income measures up to electorate level. Those became the two main map views.
+
+The maps themselves were static choropleths. After trying the whole state, I narrowed the view to inner Melbourne and labelled the neighbouring electorates so the local pattern around Goldstein was easier to read.
+
+I kept the output as static report graphics rather than interactive maps. The final set included a full-state rent map, a cropped rent map, a labelled rent map, and a labelled income map.
+
+### What the Maps Showed
+
+The maps were exploratory, but they were not vague. In the cropped Melbourne view, Goldstein was described as `over AUD 550 per week` in median rent, Kooyong as `exceeding AUD 500 per week`, and Menzies as `nearly AUD 450 per week`. The write-up also noted a visible pattern: `We observe a trend where median rent decreases as we move from urban to suburban areas.`
+
+The income map told a similar story at a different scale. Goldstein and Kooyong sat on the higher-income side of the labelled group, even though the surrounding electorates were not uniform. Alongside the maps, the demographic charts showed Goldstein with a larger 45 to 54 age group than Victoria, a slightly higher female share, and a stronger presence in the upper income brackets.
+
+The referendum slice stayed narrow and concrete: Goldstein's Yes vote share was 55.7%. Beyond that, I treated the project as a visual and exploratory read rather than a finished causal argument. The final representativeness discussion in the write-up was narrative rather than model-based, so I kept the maps as observations rather than proof.
+
+### What I Learned
+
+- Coordinate system housekeeping is not optional. The AEC and ABS layers had to be aligned before any spatial matching could be trusted.
+- Using small-area centroids to assign electorates is a practical shortcut for exploratory work, but it also made me more explicit about what I was really matching: centre points inside boundaries, not full area overlap.
+- Map extent matters as much as the variable. The full Victoria rent map was not readable enough to support any real takeaway, and the cropped Melbourne window did more analytical work than any colour scale change.
+- Static outputs can be more fragile than they look. The visible map artefacts lived in the report and notebook cache rather than clean export calls, which made me think harder about reproducibility after the plotting code itself was already working.
+
+### What's Next
+
+The next step is to finish the parts that were only sketched: bring in the missing Indigenous profile data, fix the mislabeled Chisholm electorate, and add explicit export steps instead of relying on notebook-rendered images. I would also like to compare the current small-area aggregation against the ready-made electorate layer that already ships with the ABS geography package, then turn the cropped Melbourne maps into an interactive view so the local pattern can be read electorate by electorate.

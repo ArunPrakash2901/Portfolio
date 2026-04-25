@@ -1,0 +1,85 @@
+---
+title: "ICU Mortality Prediction"
+category: "Work"
+date: "2024-03-22"
+domain: ["Healthcare", "Predictive Analytics"]
+techStack: ["R", "XGBoost", "NLP", "SHAP", "ML"]
+competencyScores:
+  analytics_eda: 54
+  statistical_reasoning: 50
+  machine_learning: 32
+  data_engineering: 51
+  cloud_infrastructure: 2
+  visualisation_bi: 54
+  communication: 53
+coverImage: "/images/ICU-mortality-prediction.webp"
+summary: "A clinical early-warning pipeline using physiological extremes and diagnosis embeddings to surface ICU mortality risk before deterioration becomes irreversible."
+---
+
+# ICU Mortality Prediction
+
+A machine learning approach to catching ICU deterioration early, using what 
+the body signals before clinicians intervene.
+
+### The Brief
+
+ICU patients don't deteriorate all at once. Risk accumulates quietly, in a 
+creatinine reading that keeps climbing, in a blood pressure that refuses to 
+stabilise. The question this project tried to answer: can a model surface that 
+signal early enough to be useful, using only data that already exists in the 
+patient record?
+
+### The Data
+
+The MIMIC-III clinical dataset. Rich, messy, and built for exactly this kind 
+of problem. Patient timelines were reconstructed from shifted dates to recover 
+true ages, a non-trivial step, since age is one of the strongest mortality 
+predictors in the ICU.
+
+The more interesting decision was how to treat physiological vitals. Averages 
+are deceptive; a patient whose heart rate swings between 48 and 140 reads as 
+normal at 94bpm. I used minimum and maximum values per observation window 
+instead, capturing the instability that means something clinically, not the 
+smooth summary that hides it.
+
+### The Approach
+
+ICD-9 diagnosis codes are typically one-hot encoded and treated as independent 
+flags. But diagnoses aren't independent; comorbidities follow patterns, and 
+conditions cascade. I applied GloVe embeddings to represent each code as a 
+vector, placing co-occurring conditions closer together in space. The model 
+could then read a patient's diagnostic history as a connected narrative rather 
+than a flat checklist.
+
+For the classifier, XGBoost with `scale_pos_weight` adjusted for the class 
+imbalance; ICU mortality sits around 11%, which means a naïve model can hit 
+89% accuracy by predicting everyone survives. Recall was the metric that 
+mattered: how many high-risk patients did we fail to flag?
+
+### The Result
+
+AUC of 0.95. Recall improved from 0.40 to 0.62 after reweighting. The accuracy 
+dropped slightly, which was intentional. In a clinical context, a missed 
+high-risk patient is a categorically worse outcome than a false alarm.
+
+SHAP values were added to explain individual predictions: which vitals were 
+pushing risk up, which diagnoses were contributing, and by how much. A model 
+that can't answer "why" is a model a clinician won't use.
+
+### What I Learned
+
+Optimising for the right metric matters more than optimising well. Most of the 
+meaningful decisions in this project weren't about model architecture; they 
+were about feature engineering, class weighting, and whether the output could 
+be trusted by someone who wasn't a data scientist.
+
+Clinical AI lives or dies on explainability. That was the real lesson.
+
+### Honest Limitations
+
+This was built on a public dataset and hasn't been validated on a local patient 
+population or near a real clinical workflow. Real deployment would require 
+prospective validation, calibration, and regulatory considerations well beyond 
+the scope of this project. What this demonstrates is the thinking: the feature 
+choices, the metric priorities, and the interpretability layer. That framing transfers 
+even when the model itself doesn't ship.

@@ -1,0 +1,96 @@
+---
+title: "What the ICU Taught Me About Building Models That Matter"
+category: "Writing"
+date: "2024-04-22"
+domain: ["Data Science", "Case Study"]
+techStack: ["R", "tidymodels", "XGBoost", "SHAP"]
+competencyScores:
+  analytics_eda: 54
+  statistical_reasoning: 50
+  machine_learning: 32
+  data_engineering: 51
+  cloud_infrastructure: 2
+  visualisation_bi: 54
+  communication: 53
+summary: "Four things I learned building a clinical mortality prediction pipeline in R, and why I'd never use accuracy as my primary metric again."
+---
+
+# What the ICU Taught Me About Building Models That Matter
+
+Most of my machine learning experience before this project involved tidy datasets, clean labels, and a leaderboard score I could feel good about. 
+The ICU dataset changed that. When the outcome you're predicting is someone dying, the usual 
+playbook stops feeling adequate pretty quickly.
+
+Here's what I actually learned.
+
+### Averages lie. Extremes don't.
+
+My first instinct with physiological data, including heart rate, blood pressure, and SpO2,   
+was to aggregate by mean. It's what you do. But consider a patient whose heart 
+rate spikes to 140 for two hours, then drops to 48 for another two. The daily 
+average reads as 94. Perfectly unremarkable.
+
+That patient is not fine.
+
+I switched to capturing min and max values per observation window instead. 
+Suddenly the model had access to the *range* of what a patient's body was doing, 
+the instability, rather than a smoothed-out summary that hid it. Feature 
+importance scores shifted dramatically. The clinical literature, it turns out, 
+already knew this. I just had to catch up.
+
+### Diagnosis codes are a language. Treat them like one.
+
+ICD codes are typically one-hot encoded and fed into a model as independent 
+flags. But diagnoses aren't independent; heart failure begets kidney dysfunction, 
+which in turn begets electrolyte imbalance. There's a flow to how conditions co-occur and 
+progress.
+
+I used word embeddings to represent diagnosis codes, mapping each condition into 
+a vector space where comorbid diseases sit closer together. The model could then 
+"read" a patient's diagnostic history as something more like a connected 
+narrative than a checklist. It's a technique borrowed from NLP, applied to a 
+domain that turned out to need it.
+
+### An 89% accurate model can be completely useless.
+
+ICU mortality in this dataset sat around 11%. Which means a model that predicts 
+*everyone survives* is 89% accurate and clinically worthless. I knew this 
+intellectually before the project. I understood it differently after seeing it 
+in a confusion matrix with real patient outcomes attached.
+
+I used `scale_pos_weight` in XGBoost to reweight the minority class, pushing 
+the model to treat a missed high-risk patient as far more costly than a false 
+alarm. The accuracy dropped. Recall went up. That was the right trade.
+
+In healthcare, the metric that matters is: *how many sick patients did you fail 
+to flag?* Everything else is secondary.
+
+### If it can't explain itself, a clinician can't use it.
+
+This was the hardest lesson, and the one I think about most.
+
+Partway through the project I realised I had been optimising for a number on a 
+validation set and that a number alone is not something a doctor can act on. 
+A model that says "this patient has a 73% mortality risk" without any supporting 
+rationale is asking for a level of trust that hasn't been earned.
+
+I added SHAP values to surface which features were driving each individual 
+prediction. Abnormal creatinine pushing risk up, low minimum SpO2 contributing 
+heavily; suddenly the output had something a clinician could interrogate, 
+push back on, or integrate with their own judgment.
+
+Explainability isn't a nice-to-have in clinical AI. It's the price of entry.
+
+### What I'd do differently
+
+The honest version: this model isn't ready for deployment and I knew that going 
+in. It was built on a public dataset, not validated on a local patient population, 
+and hasn't been near a clinician's workflow. Real clinical AI involves 
+calibration, prospective validation, and regulatory considerations well beyond 
+the scope of this project.
+
+What it *is* is a demonstration of how to think about the problem: the feature 
+engineering choices, the metric selection, and the interpretability layer. That 
+framing transfers even when the model itself doesn't ship.
+
+The ICU is an extreme environment. It turned out to be a good teacher.

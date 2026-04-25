@@ -1,0 +1,156 @@
+---
+title: "Treasury Nowcasting"
+category: "Work"
+date: "2025-11-03"
+domain: ["Macroeconomics", "Data Engineering", "Bayesian Inference"]
+techStack: ["R", "Python", "targets", "tarchetypes", "readabs", "readrba", "NumPy", "pandas", "SciPy", "Quarto"]
+competencyScores:
+  analytics_eda: 57
+  statistical_reasoning: 64
+  machine_learning: 35
+  data_engineering: 72
+  cloud_infrastructure: 2
+  visualisation_bi: 58
+  communication: 61
+coverImage: "/images/treasury-nowcasting.png"
+summary: "A registry-driven nowcasting pipeline that turns ABS and RBA releases into clean, reproducible inputs for state and national output estimation. The data engineering held up; the Bayesian estimation stack did not, and that failure is documented rather than hidden."
+---
+
+# Treasury Nowcasting
+
+*This project split cleanly into two parts. The data pipeline produced a transparent, reproducible base for state and national output estimation; the Bayesian estimation layer pushed into mixed-frequency coherence work that never resolved into a stable posterior.*
+
+### The Brief
+
+GSP nowcasting is an attempt to estimate state output before every
+input series has fully settled. The end goal was not a generic macro dashboard;
+it was a coherent state-and-national system where Gross State Product, State
+Final Demand, and higher-frequency macro indicators could be handled in one
+workflow without losing track of how the pieces relate to each other.
+
+That matters for anyone who needs an earlier read on economic activity than the
+annual GSP releases provide. The project documents that need through snapshot
+construction, ragged-edge handling, and a national measurement equation tied
+back to weighted state growth rather than through a disconnected state-by-state
+exercise.
+
+### The Data & Pipeline
+
+The strongest part of the project is the ingestion and preparation layer. The
+active `targets` graph is explicit: one step defines the series schema,
+another loads it, then separate stages pull ABS and RBA series, combine them,
+clean them, and write out a modeling-ready artefact. That separation matters
+because each step can be inspected on its own instead of being buried inside a
+notebook.
+
+The active schema covers a mixed panel. On the ABS side it includes national
+GDP and CPI, monthly goods imports and exports, business turnover, quarterly
+State Final Demand for every state and territory, and annual Gross State
+Product current-price series for `NSW`, `VIC`, `QLD`, `SA`, `WA`, `TAS`, `NT`,
+and `ACT`. On the RBA side it pulls the cash rate target, trimmed mean
+inflation, total credit, the trade-weighted index, and commodity prices. The
+surrounding notes also document the ABS and RBA selection workflow and example
+catalogue pulls used during sourcing.
+
+What makes the pipeline worth highlighting is the amount of standardisation it
+bakes in before any model sees the data. Both source pulls work from the same
+registry. The preparation layer normalises dates and frequency labels, fills
+missing frequency information, adds consistent state identifiers, drops noisy
+optional columns, and reorders the output into a stable layout. The quarterly
+tooling goes further: it first rolls daily and weekly data up to monthly
+values, then aggregates to quarter using clear rules such as sums, last
+observations, compounded growth, or means. It also tracks how stale each
+series is and defines several snapshot cut points so the same quarter can be
+viewed under different information sets.
+
+It is not perfectly clean end to end yet: the active code expects the schema in 
+a different location from where the checked-in version currently sits, and the 
+pipeline writes a differentintermediate format from the one the report and notebooks 
+read. But the core idea survived contact with the project. The ingestion, cleaning, and
+quarterisation logic is legible, separable, and rerunnable.
+
+### The Modeling Arc
+
+The first phase was exploratory. In the Python notebooks, the national series,
+four exogenous macro series, eight state series, and annual GSP weights were
+forced onto a common quarterly intersection running from `1991Q2` to `2025Q4`.
+That pass did not claim the coherence link worked automatically. The
+weighted-state combination only correlated with the national series at about
+`0.518`, with explained variance around `0.268`, and the best lag search still
+landed at zero. Period correlations improved in later windows, but the notebook
+conclusion was effectively that the national measurement block still had to be
+modelled rather than assumed away.
+
+That led to the Bayesian VAR direction. The report and estimation notes make
+the aim explicit: a latent state-growth VAR, a national measurement equation
+tied to weighted contemporaneous state growth, Minnesota shrinkage,
+Dirichlet-Laplace sparsity, stochastic volatility, and blocked Gibbs plus FFBS
+to hold the system together. This was not Bayesian styling for its own sake; it
+was an attempt to keep state-national coherence inside the model instead of
+repairing it after the fact.
+
+The next beat was the mixed-frequency BVAR work in R.
+That code expects monthly time-series inputs, pads quarterly variables with
+missing values between quarter ends, enforces a weekly-to-monthly-to-quarterly
+ordering, standardises the inputs, and then tries several variance settings.
+In other words, it was trying to solve the exact problem the simpler quarterly
+notebook could not: how to keep mixed frequencies, coherence, and shrinkage in
+one estimation routine without the whole system becoming numerically fragile.
+
+After that, the implementation path shifted into Python. The notebooks run
+under a PyMC-oriented environment and the estimation notes mention a
+missing-value idea, but the committed code does not contain a finished PyMC
+model or sampling workflow. The pivot is better described as Python plus
+custom blocked-Gibbs and forward-filtering backward-sampling code than as a
+finished PyMC model. The Python phase kept the same economic target and the
+same coherence structure, but it implemented them through notebook-local
+samplers instead of a completed package.
+
+The closest thing to a paper replication in the project is the attempt to
+operationalise the cited mixed-frequency Bayesian nowcasting literature.
+
+### Where It Broke
+The clearest mechanical break recorded in
+the project is: "Highly collinear data pairs causing Cholesky decomposition
+failure, followed by matrix out of bound errors." Furthermore, after lag expansion, the feature matrix contained near-duplicate
+columns, which turned the mixed-frequency system into a multicollinearity
+problem before it could become a trustworthy nowcast. Around that, the wider
+the same cluster of issues: identification and scaling,
+sensitivity to prior choices, sampler errors, and timing mismatches. The end
+result showed up in the checks as well as the code. One of
+evaluations missed the project's own calibration thresholds on correlation
+(`0.674` against a `>= 0.70` target) and 80% posterior predictive coverage
+(`0.744` against a `0.75-0.85` target), while zero states landed inside the
+target coverage band. That is why the paper-inspired
+version proved brittle here. Too much structural complexity was being asked to
+settle at once. For this to work, the project's own prescription is the right one:
+reduce dimensionality, use more structured priors, build the model in stages
+from fixed-volatility VAR upward, and only reintroduce full mixed-frequency and
+stochastic-volatility machinery after a simpler version converges.
+
+### What I Learned
+
+- A registry-driven `targets` graph can still produce usable economic
+  infrastructure even when the estimator above it is unsettled. The fetch and
+  clean path stayed inspectable because each step had one job.
+- Mixed-frequency coherence is a modeling constraint, not just a data-wrangling
+  detail. Annual GSP anchors, quarterly State Final Demand, and monthly macro
+  indicators can live in one project, but their timing mismatches do not
+  disappear because the tables line up.
+- Lag expansion can quietly manufacture near-duplicate columns. In this
+  project, that showed up as multicollinearity, Cholesky failure, and
+  matrix-bound errors rather than as a polite warning.
+- Calibration checks have to be treated as hard gates. A model that preserves
+  coherence numerically but misses its own coverage and correlation targets is
+  not ready.
+- If the full MF-BVAR-SV stack will not settle, the right move is down, not
+  sideways: fewer series, stronger structure, and staged complexity before
+  scaling back up.
+
+### Honest Limitations
+
+The current project scenario is not a clean one-command bridge from data pull to final
+estimation. The final notebook cells depend on in-memory
+objects that are not preserved in the file tree. Those are repo-level
+limitations on top of the modeling failure, and they matter for anyone trying
+to rerun the full stack exactly as saved.

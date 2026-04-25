@@ -6,3 +6,6 @@ type Collections = typeof __vc.collections
 
 export type Project = Collections['projects']['schema']['_output']
 export declare const projects: Project[]
+
+export type Experiment = Collections['experiments']['schema']['_output']
+export declare const experiments: Experiment[]

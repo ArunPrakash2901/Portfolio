@@ -6,7 +6,10 @@ export async function getProjects() {
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
   const projects = await Promise.all(
     files.map(async (file) => {
-      const module = await import(`@/content/projects/${file.replace('.ts', '')}`);
+      const module = await import(
+        /* webpackExclude: /\.mdx$/ */
+        `@/content/projects/${file.replace('.ts', '')}`
+      );
       return module.default;
     })
   );

@@ -1,21 +1,22 @@
 const project = {
   slug: "icu-mortality",
   name: "ICU Mortality Prediction",
-  oneLiner: "Predicting patient outcomes using high-frequency physiological data.",
+  oneLiner: "A machine learning approach to catching ICU deterioration early, using what the body signals before clinicians intervene.",
   status: "Completed",
-  builtDate: "2024-03",
-  stack: ["Python", "Scikit-Learn", "Pandas", "XGBoost"],
-  githubUrl: "https://github.com/ArunPrakash2901/icu-mortality",
-  why: "To bridge the gap between raw medical sensor data and actionable clinical insights.",
-  hard: "Handling the extreme sparsity and non-uniform sampling rates of real-world ICU data.",
-  differently: "I would explore Transformer-based architectures for better temporal dependency modeling.",
+  builtDate: "2025-04",
+  stack: ["R", "XGBoost", "NLP (GloVe)", "SHAP", "ML"],
+  githubUrl: "https://github.com/ArunPrakash2901/Mortality_prediction_ICU_data",
+  blogUrl: "/writing/icu-mortality-lessons",
+  why: "To move beyond simple classification and provide clinicians with early warning signs, giving them more time to intervene and save lives.",
+  hard: "Clinical data reality: Reconstructing patient timelines from shifted dates and capturing physiological instability through Min/Max vitals instead of misleading averages.",
+  differently: "I would use Recurrent Neural Networks (RNNs) or Transformers to capture the temporal sequence of diagnoses, rather than just static co-occurrence patterns.",
   notes: [
-    "Used SMOTE for class imbalance handling.",
-    "Engineered custom rolling-window features for heart rate variability.",
-    "Validated against the MIMIC-III open dataset."
+    "Engineered 50-dimensional GloVe embeddings for ICD-9 codes to capture medical context.",
+    "Balanced class weights (7.91) to improve recall from 0.40 to 0.62 for high-risk patients.",
+    "Integrated SHAP values to provide transparent, patient-level explanations for clinical trust.",
+    "Achieved a ROC-AUC of 0.95 across a 5-fold cross-validation suite."
   ],
-  media: "https://images.unsplash.com/photo-1581056310764-3235339f4083?q=80&w=800"
+  media: "/images/ICU-mortality-prediction.webp"
 };
 
 export default project;
-

@@ -77,6 +77,17 @@ export default defineConfig({
         summary: s.string(),
         code: s.mdx()
       })
+    },
+    experiments: {
+      name: 'Experiment',
+      pattern: 'experiments/**/*.mdx',
+      schema: s.object({
+        title: s.string().max(99),
+        slug: s.path(),
+        date: s.isodate(),
+        summary: s.string(),
+        code: s.mdx()
+      })
     }
   }
 })
