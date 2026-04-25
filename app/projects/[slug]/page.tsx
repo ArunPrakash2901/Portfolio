@@ -1,14 +1,21 @@
-import fs from 'fs';
-import path from 'path';
 import ProjectHero from '@/components/project/ProjectHero';
 import ProjectStory from '@/components/project/ProjectStory';
 import ProjectNotes from '@/components/project/ProjectNotes';
 import ProjectFooterNav from '@/components/project/ProjectFooterNav';
+import JsonLd from '@/components/JsonLd';
 import { notFound } from 'next/navigation';
-import { projects as veliteProjects } from '#velite';
 import * as runtime from 'react/jsx-runtime';
 import SCurveScrollFlow from '@/components/SCurveScrollFlow';
 import type { Metadata } from 'next';
+import { getProjectBySlug, getProjectPostBySlug, getProjects } from '@/lib/data';
+import {
+  PERSON_NAME,
+  SITE_URL,
+  buildMetadata,
+  buildOgImageUrl,
+  normalizeFlexibleDate,
+  toAbsoluteUrl,
+} from '@/lib/seo';
 
 const getMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -24,88 +31,84 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-async function getProjects() {
-  const dir = path.join(process.cwd(), 'content/projects');
-  const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
-  const projects = await Promise.all(
-    files.map(async (file) => {
-      const contentModule = await import(
-        /* webpackInclude: /\.ts$/ */
-        `@/content/projects/${file}`
-      );
-      return contentModule.default;
-    })
-  );
-  return projects;
-}
-
 export async function generateStaticParams() {
-  const dir = path.join(process.cwd(), 'content/projects');
-  if (!fs.existsSync(dir)) return [];
-  const files = fs.readdirSync(dir);
-  return files
-    .filter(file => file.endsWith('.ts'))
-    .map(file => ({
-      slug: file.replace('.ts', '')
-    }));
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = veliteProjects.find((p) => p.slug === `projects/${slug}`);
+  const project = await getProjectBySlug(slug);
 
-  if (!post) {
-    return { title: 'Project Not Found' };
+  if (!project) {
+    notFound();
   }
 
-  const ogImageUrl = `/api/og?title=${encodeURIComponent(post.title)}&tag=${encodeURIComponent(post.domain[0] || 'Work')}`;
-  const imageUrl = post.coverImage || ogImageUrl;
+  const post = getProjectPostBySlug(slug);
+  const title = post?.title ?? project.name;
+  const description = post?.summary ?? project.oneLiner;
+  const ogTag = post?.domain[0] ?? project.stack[0] ?? 'Project';
+  const imageUrl =
+    post?.coverImage ?? project.media ?? buildOgImageUrl(title, ogTag);
 
-  return {
-    title: post.title,
-    description: post.summary,
-    openGraph: {
-      title: post.title,
-      description: post.summary,
-      type: 'article',
-      publishedTime: post.date,
-      tags: post.domain,
-      images: [
-        {
-          url: imageUrl,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.summary,
-      images: [imageUrl],
-    },
-  };
+  return buildMetadata({
+    title,
+    description,
+    path: `/projects/${slug}`,
+    type: post?.date ? 'article' : 'website',
+    image: imageUrl,
+    imageAlt: title,
+    ogTag,
+    category: 'portfolio project',
+    keywords: [...project.stack, ...(post?.domain ?? [])],
+    publishedTime: post?.date,
+  });
 }
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   const projects = await getProjects();
-  const currentIndex = projects.findIndex(p => p.slug === slug);
-  
+  const currentIndex = projects.findIndex((project) => project.slug === slug);
+
   if (currentIndex === -1) notFound();
 
   const project = projects[currentIndex];
   const prev = currentIndex > 0 ? projects[currentIndex - 1] : null;
-  const next = currentIndex < projects.length - 1 ? projects[currentIndex + 1] : null;
-
-  // Check if there is an MDX version from Velite
-  const mdxProject = veliteProjects.find(p => p.slug === `projects/${slug}`);
+  const next =
+    currentIndex < projects.length - 1 ? projects[currentIndex + 1] : null;
+  const mdxProject = getProjectPostBySlug(slug);
+  const title = mdxProject?.title ?? project.name;
+  const description = mdxProject?.summary ?? project.oneLiner;
+  const ogTag = mdxProject?.domain[0] ?? project.stack[0] ?? 'Project';
+  const imageUrl =
+    mdxProject?.coverImage ?? project.media ?? buildOgImageUrl(title, ogTag);
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: title,
+    description,
+    url: toAbsoluteUrl(`/projects/${slug}`),
+    image: toAbsoluteUrl(imageUrl),
+    author: {
+      '@type': 'Person',
+      name: PERSON_NAME,
+      url: SITE_URL,
+    },
+    dateCreated: normalizeFlexibleDate(project.builtDate),
+    datePublished:
+      mdxProject?.date ?? normalizeFlexibleDate(project.builtDate),
+    genre: 'Portfolio project',
+    inLanguage: 'en-AU',
+    keywords: [...project.stack, ...(mdxProject?.domain ?? [])].join(', '),
+  };
 
   return (
     <main className="relative z-10 min-h-screen flex flex-col bg-transparent">
+      <JsonLd data={projectJsonLd} />
       <ProjectHero project={project} />
-      
+
       {mdxProject && (
         <SCurveScrollFlow>
           {renderMDX(mdxProject.code)}

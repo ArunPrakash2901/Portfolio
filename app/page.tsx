@@ -1,19 +1,112 @@
 import fs from 'fs';
 import path from 'path';
-import { projects as veliteProjects } from '#velite';
-import RadarChart from '@/components/RadarChart';
+import { Suspense } from 'react';
 import CompassHeader from '@/components/CompassHeader';
 import Image from 'next/image';
 import LiveTelemetry from '@/components/LiveTelemetry';
-import ProcessSection from '@/components/ProcessSection';
-import BuiltForFunList from '@/components/BuiltForFunList';
-import LossLandscape from '@/components/LossLandscape'; 
 import Link from 'next/link';
-import { getProjects, getExperiments } from '@/lib/data';
+import type { Metadata } from 'next';
+import DeferredBuiltForFunList from '@/components/DeferredBuiltForFunList';
+import DeferredLossLandscape from '@/components/DeferredLossLandscape';
+import DeferredProcessSection from '@/components/DeferredProcessSection';
+import DeferredRadarChart from '@/components/DeferredRadarChart';
+import JsonLd from '@/components/JsonLd';
+import { getProjects, getExperiments, getWritingPosts } from '@/lib/data';
+import {
+  GLOBAL_KEYWORDS,
+  PERSON_LOCATION,
+  PERSON_NAME,
+  PERSON_ROLE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+  SOCIAL_LINKS,
+  buildMetadata,
+  toAbsoluteUrl,
+} from '@/lib/seo';
 
 type RadarDatum = {
   competency: string;
   score: number;
+};
+
+function LiveTelemetryFallback() {
+  return (
+    <div className="mt-8 inline-flex items-center gap-3 rounded-full border border-stone-200 bg-stone-100 px-1.5 py-1.5 pr-4 text-xs shadow-sm">
+      <div className="flex items-center gap-2 rounded-full bg-stone-200 px-3 py-1">
+        <span className="h-2 w-2 rounded-full bg-stone-400" aria-hidden="true" />
+        <span className="text-[10px] font-sans font-bold tracking-wider text-stone-500">
+          LOADING ACTIVITY
+        </span>
+      </div>
+    </div>
+  );
+}
+
+export const metadata: Metadata = buildMetadata({
+  title: { absolute: SITE_TITLE },
+  description: SITE_DESCRIPTION,
+  path: '/',
+  type: 'website',
+  ogTag: 'Data & AI Portfolio',
+  category: 'portfolio',
+  keywords: GLOBAL_KEYWORDS,
+});
+
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${SITE_URL}/#person`,
+      name: PERSON_NAME,
+      url: SITE_URL,
+      image: toAbsoluteUrl('/images/profile-headshot.png'),
+      description: SITE_DESCRIPTION,
+      jobTitle: PERSON_ROLE,
+      homeLocation: {
+        '@type': 'Place',
+        name: PERSON_LOCATION,
+      },
+      sameAs: SOCIAL_LINKS,
+      knowsAbout: [
+        'Data analytics',
+        'Machine learning',
+        'Data engineering',
+        'Statistics',
+        'Data visualization',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      inLanguage: 'en-AU',
+      publisher: {
+        '@id': `${SITE_URL}/#person`,
+      },
+    },
+    {
+      '@type': 'ProfilePage',
+      '@id': `${SITE_URL}/#webpage`,
+      url: SITE_URL,
+      name: SITE_TITLE,
+      description: SITE_DESCRIPTION,
+      isPartOf: {
+        '@id': `${SITE_URL}/#website`,
+      },
+      about: {
+        '@id': `${SITE_URL}/#person`,
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: toAbsoluteUrl('/images/profile-headshot.png'),
+      },
+    },
+  ],
 };
 
 export default async function Home() {
@@ -27,14 +120,13 @@ export default async function Home() {
   }
 
   // Load new filesystem data
-  const workProjects = await getProjects();
-  const experiments = await getExperiments();
+  const [workProjects, experiments] = await Promise.all([getProjects(), getExperiments()]);
   
   // Sort radarData in descending order by score
   const sortedRadarData = [...radarData].sort((a, b) => b.score - a.score);
 
   // Velite posts for the blog section
-  const writingPosts = veliteProjects.filter(p => p.category === 'Writing');
+  const writingPosts = getWritingPosts();
 
   const tickerItems = [
     { label: "Now reading", value: "" },
@@ -46,8 +138,9 @@ export default async function Home() {
 
   return (
     <main className="relative w-full flex-1 flex flex-col">
+      <JsonLd data={homeJsonLd} />
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <LossLandscape />
+        <DeferredLossLandscape />
       </div>
       <div className="w-full my-8 rounded-3xl overflow-hidden shadow-sm border border-white/20">
         {/* Ticker Section */}
@@ -72,7 +165,9 @@ export default async function Home() {
             <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#556E74]">Data Professional · Melbourne</span>
             <h1 className="font-serif text-[42px] leading-[1.1] text-[#1A1814] m-0">Arun Krishnasamy</h1>
             <p className="text-[17px] text-[#5A5650] leading-[1.6] max-w-[440px] m-0">I&apos;m at the beginning of my story in data; but I show up curious, I stay until it makes sense, and I let the numbers do the talking.</p>
-            <LiveTelemetry />
+            <Suspense fallback={<LiveTelemetryFallback />}>
+              <LiveTelemetry />
+            </Suspense>
           </div>
           <div className="relative bg-[#E8E1D5] flex items-center justify-center p-8 md:p-0 overflow-hidden">
             <div className="relative w-full max-w-md mx-auto md:max-w-none md:w-full aspect-[4/5] lg:aspect-[3/4] overflow-hidden rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-transform duration-500 hover:scale-[1.02]">
@@ -106,7 +201,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
 
             <div className="flex justify-center -mx-8 md:mx-0">
-               <RadarChart data={radarData} />
+               <DeferredRadarChart data={radarData} />
             </div>
             <div className="flex flex-col gap-[13px]">
               {sortedRadarData.map((axis, i) => (
@@ -141,7 +236,13 @@ export default async function Home() {
               >
                 <div className="h-[86px] bg-[#E8E1D5] flex items-center justify-center relative overflow-hidden">
                   {project.media ? (
-                    <Image src={project.media} alt={project.name} fill className="object-cover opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <Image
+                      src={project.media}
+                      alt={project.name}
+                      fill
+                      className="object-cover opacity-50 group-hover:opacity-100 transition-opacity"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
                   ) : (
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 17l4-8 4 4 4-6 4 6" stroke="#2F6B75" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   )}
@@ -173,7 +274,7 @@ export default async function Home() {
         <div className="h-[0.5px] bg-[#E0DAD0] w-full"></div>
 
         {/* Process Section */}
-        <ProcessSection />
+        <DeferredProcessSection />
 
         <div className="h-[0.5px] bg-[#E0DAD0] w-full"></div>
 
@@ -184,7 +285,7 @@ export default async function Home() {
             <p className="text-[12px] text-[#556E74] italic mt-1">experiments, tools, and things built for fun</p>
           </div>
           
-          <BuiltForFunList experiments={experiments} />
+          <DeferredBuiltForFunList experiments={experiments} />
         </section>
 
         <div className="h-[0.5px] bg-[#E0DAD0] w-full"></div>

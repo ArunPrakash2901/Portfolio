@@ -1,7 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { DM_Serif_Display, DM_Sans } from 'next/font/google';
 import './globals.css';
 import Shell from '@/components/Shell';
+import {
+  DEFAULT_OG_IMAGE,
+  GLOBAL_KEYWORDS,
+  PERSON_NAME,
+  SITE_DESCRIPTION,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from '@/lib/seo';
 
 const dmSerif = DM_Serif_Display({
   weight: '400',
@@ -15,40 +25,68 @@ const dmSans = DM_Sans({
   weight: ['300', '400', '500'],
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://arun.dev';
+export const viewport: Viewport = {
+  colorScheme: 'light',
+  themeColor: '#F7F4EF',
+};
 
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Arun Krishnasamy — Data & AI Portfolio',
+    default: SITE_TITLE,
     template: '%s — Arun Krishnasamy',
   },
-  description: 'Turning messy data into decisions people trust. A portfolio spanning analytics, machine learning, data engineering, and the full data stack.',
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [
+    {
+      name: PERSON_NAME,
+      url: SITE_URL,
+    },
+  ],
+  creator: PERSON_NAME,
+  publisher: PERSON_NAME,
+  category: 'technology',
+  keywords: GLOBAL_KEYWORDS,
+  referrer: 'origin-when-cross-origin',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  manifest: '/manifest.webmanifest',
   openGraph: {
     type: 'website',
-    locale: 'en_AU',
-    url: BASE_URL,
-    siteName: 'Arun Krishnasamy — Data Portfolio',
-    title: 'Arun Krishnasamy — Data & AI Portfolio',
-    description: 'Turning messy data into decisions people trust. A portfolio spanning analytics, machine learning, data engineering, and the full data stack.',
+    locale: SITE_LOCALE,
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/api/og?title=Arun%20Krishnasamy&tag=Data%20%26%20AI%20Portfolio',
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'Arun Krishnasamy — Data & AI Portfolio',
+        alt: SITE_TITLE,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Arun Krishnasamy — Data & AI Portfolio',
-    description: 'Turning messy data into decisions people trust.',
-    images: ['/api/og?title=Arun%20Krishnasamy&tag=Data%20%26%20AI%20Portfolio'],
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

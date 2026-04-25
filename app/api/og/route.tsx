@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
+import { SITE_HOST } from '@/lib/seo';
 
 export const runtime = 'edge';
 
@@ -170,7 +171,7 @@ export async function GET(request: NextRequest) {
                 color: '#F7F4EF',
               }}
             >
-              arunk.dev
+              {SITE_HOST}
             </span>
             <div
               style={{

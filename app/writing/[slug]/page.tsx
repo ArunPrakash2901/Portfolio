@@ -1,7 +1,15 @@
-import { projects } from '#velite';
 import { notFound } from 'next/navigation';
 import * as runtime from 'react/jsx-runtime';
 import type { Metadata } from 'next';
+import JsonLd from '@/components/JsonLd';
+import { getWritingPostBySlug, getWritingPosts } from '@/lib/data';
+import {
+  PERSON_NAME,
+  SITE_URL,
+  buildMetadata,
+  buildOgImageUrl,
+  toAbsoluteUrl,
+} from '@/lib/seo';
 
 const getMDXComponent = (code: string) => {
   const fn = new Function(code);
@@ -19,61 +27,71 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = projects.find(
-    (p) => p.slug === `projects/${slug}` && p.category === 'Writing'
-  );
+  const post = getWritingPostBySlug(slug);
 
   if (!post) {
-    return { title: 'Post Not Found' };
+    notFound();
   }
 
-  const ogImageUrl = `/api/og?title=${encodeURIComponent(post.title)}&tag=${encodeURIComponent(post.domain[0] || 'Writing')}`;
+  const ogTag = post.domain[0] || 'Writing';
+  const imageUrl = post.coverImage ?? buildOgImageUrl(post.title, ogTag);
 
-  return {
+  return buildMetadata({
     title: post.title,
     description: post.summary,
-    openGraph: {
-      title: post.title,
-      description: post.summary,
-      type: 'article',
-      publishedTime: post.date,
-      tags: post.domain,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.summary,
-      images: [ogImageUrl],
-    },
-  };
+    path: `/writing/${slug}`,
+    type: 'article',
+    image: imageUrl,
+    imageAlt: post.title,
+    ogTag,
+    category: 'writing',
+    keywords: [...post.domain, ...post.techStack],
+    publishedTime: post.date,
+  });
 }
 
 export async function generateStaticParams() {
-  return projects
-    .filter((p) => p.category === 'Writing')
-    .map((p) => ({
-      slug: p.slug.replace('projects/', ''),
-    }));
+  return getWritingPosts().map((post) => ({
+    slug: post.slug.replace('projects/', ''),
+  }));
 }
 
 export default async function WritingPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = projects.find(
-    (p) => p.slug === `projects/${slug}` && p.category === 'Writing'
-  );
+  const post = getWritingPostBySlug(slug);
 
   if (!post) notFound();
 
+  const imageUrl =
+    post.coverImage ?? buildOgImageUrl(post.title, post.domain[0] || 'Writing');
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.date,
+    dateModified: post.date,
+    image: toAbsoluteUrl(imageUrl),
+    url: toAbsoluteUrl(`/writing/${slug}`),
+    mainEntityOfPage: toAbsoluteUrl(`/writing/${slug}`),
+    author: {
+      '@type': 'Person',
+      name: PERSON_NAME,
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Person',
+      name: PERSON_NAME,
+      url: SITE_URL,
+    },
+    articleSection: post.domain,
+    keywords: [...post.domain, ...post.techStack].join(', '),
+    inLanguage: 'en-AU',
+  };
+
   return (
     <main className="relative z-10 w-full flex-1 flex flex-col bg-transparent">
+      <JsonLd data={articleJsonLd} />
       <div className="mx-auto w-full max-w-3xl px-3 pt-3 md:px-6">
         <div className="flex items-center gap-2 rounded-full border border-[#E0DAD0] bg-[#EFEBE3]/72 px-4 py-1.5 text-[10px] font-medium tracking-[0.12em] uppercase text-[#999999] backdrop-blur-sm">
           writing / {post.domain[0]?.toLowerCase() || 'the log'}
