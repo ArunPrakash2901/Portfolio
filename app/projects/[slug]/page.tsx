@@ -29,7 +29,10 @@ async function getProjects() {
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
   const projects = await Promise.all(
     files.map(async (file) => {
-      const contentModule = await import(`@/content/projects/${file}`);
+      const contentModule = await import(
+        /* webpackInclude: /\.ts$/ */
+        `@/content/projects/${file}`
+      );
       return contentModule.default;
     })
   );
