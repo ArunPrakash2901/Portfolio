@@ -1,4 +1,14 @@
-export default function ProjectHeader({ project }: { project: any }) {
+type ProjectHeaderData = Record<string, unknown> & {
+  builtDate?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  name: string;
+  oneLiner: string;
+  stack: string[];
+  status: string;
+};
+
+export default function ProjectHeader({ project }: { project: ProjectHeaderData }) {
   return (
     <div className="flex h-full flex-col justify-center gap-8 bg-[#F7F4EF]">
       <div className="flex flex-wrap items-center gap-3">

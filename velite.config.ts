@@ -2,7 +2,7 @@ import { defineConfig, s } from 'velite'
 import rehypePrettyCode from 'rehype-pretty-code'
 
 // Monochromatic high-contrast dark theme inspired by minimal Vim environments
-const monochromeTheme: any = {
+const monochromeTheme: unknown = {
   name: "monochrome",
   type: "dark",
   colors: {

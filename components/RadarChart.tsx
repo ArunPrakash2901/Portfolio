@@ -66,15 +66,18 @@ export default function RadarChart({ data }: RadarChartProps) {
           },
         }}
         sliceTooltip={({ index, data: chartData }) => {
-          const item = (chartData as any[]).find((d: any) => d.competency === index) || {} as any;
-          const projects = item.contributingProjects || [];
+          const radarEntries = Array.isArray(chartData)
+            ? (chartData as RadarData[])
+            : [];
+          const item = radarEntries.find((entry) => entry.competency === index);
+          const projects = item?.contributingProjects ?? [];
           
           return (
             <div className="bg-[#EFEBE3] border-[0.5px] border-[#D4C9B8] p-4 flex flex-col gap-2 min-w-[200px] font-sans shadow-lg rounded-md relative z-50">
               <div className="flex justify-between items-center border-b-[0.5px] border-[#D4C9B8] pb-2 mb-1">
-                <span className="text-[#2F6B75] text-[10px] font-medium uppercase tracking-widest">{item.competency}</span>
+                <span className="text-[#2F6B75] text-[10px] font-medium uppercase tracking-widest">{item?.competency ?? index}</span>
                 <span className="text-[#1A1814] font-serif tracking-tight font-medium text-lg">
-                  {item.score}
+                  {item?.score ?? ''}
                 </span>
               </div>
               

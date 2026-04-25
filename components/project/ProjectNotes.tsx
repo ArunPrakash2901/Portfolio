@@ -7,6 +7,14 @@ const GLOSSARY = {
   "Minimax AI": "An algorithm that looks ahead in a game and chooses moves by assuming the opponent will always respond in the best possible way."
 };
 
+type ProjectNote = Record<string, unknown> & {
+  body: string;
+};
+
+type ProjectNotesData = Record<string, unknown> & {
+  notes?: Array<ProjectNote | string>;
+};
+
 function TechnicalText({ text }: { text: string }) {
   const [hoveredTerm, setHoveredTerm] = useState<string | null>(null);
 
@@ -59,8 +67,8 @@ function TechnicalText({ text }: { text: string }) {
   );
 }
 
-export default function ProjectNotes({ project }: { project: any }) {
-  const notes = (project.notes ?? []).map((note: any) =>
+export default function ProjectNotes({ project }: { project: ProjectNotesData }) {
+  const notes = (project.notes ?? []).map((note): ProjectNote =>
     typeof note === 'string'
       ? {
           body: note,
@@ -84,7 +92,7 @@ export default function ProjectNotes({ project }: { project: any }) {
         </div>
 
         <div className="space-y-16">
-          {notes.map((note: any, i: number) => (
+          {notes.map((note, i: number) => (
             <article key={i} className="border-t-[0.5px] border-[#E0DAD0] pt-10 first:border-t-0 first:pt-0">
               <span style={{
                 fontFamily: 'var(--font-mono)',

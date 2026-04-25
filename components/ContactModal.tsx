@@ -92,12 +92,12 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   </p>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-serif text-2xl text-stone-900">Let's talk.</h3>
+                  <h3 className="font-serif text-2xl text-stone-900">Let&apos;s talk.</h3>
                   <p className="text-stone-600 leading-relaxed font-light">
-                    I'm looking for a data role, whether that's in analytics, engineering, or somewhere in the middle. I may be at the start of my career, but I build relentlessly, I ask the right questions, and I stay at the keyboard until the it makes sense.
+                    I&apos;m looking for a data role, whether that&apos;s in analytics, engineering, or somewhere in the middle. I may be at the start of my career, but I build relentlessly, I ask the right questions, and I stay at the keyboard until the it makes sense.
                   </p>
                   <p className="text-stone-600 leading-relaxed font-light">
-                    If something in this portfolio made you curious, I'd genuinely love to hear from you.
+                    If something in this portfolio made you curious, I&apos;d genuinely love to hear from you.
                   </p>
                 </div>
               </div>

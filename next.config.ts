@@ -3,7 +3,7 @@ import path from "path";
 
 class VeliteWebpackPlugin {
   static started = false;
-  apply(compiler: any) {
+  apply(compiler: import('webpack').Compiler) {
     // Prevent multiple builds in watch mode
     compiler.hooks.beforeCompile.tapPromise("VeliteWebpackPlugin", async () => {
       if (VeliteWebpackPlugin.started) return;
@@ -24,10 +24,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  webpack: (config) => {
-    config.plugins.push(new VeliteWebpackPlugin());
-    config.resolve.alias = {
-      ...config.resolve.alias,
+  webpack: (config: import('webpack').Configuration) => {
+    const typedConfig = config as import('webpack').Configuration & {
+      plugins: NonNullable<import('webpack').Configuration['plugins']>;
+      resolve: NonNullable<import('webpack').Configuration['resolve']>;
+    };
+
+    typedConfig.plugins.push(new VeliteWebpackPlugin());
+    typedConfig.resolve.alias = {
+      ...(typedConfig.resolve.alias as Record<string, string | false | string[]>),
       "#velite": path.resolve(__dirname, ".velite"),
     };
     return config;

@@ -1,13 +1,21 @@
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import type { ComponentType } from 'react';
 
-const customArtifactComponents = {
+type ProjectArtifactData = Record<string, unknown> & {
+  customComponent?: string;
+  liveUrl?: string;
+  media?: string;
+  name: string;
+};
+
+const customArtifactComponents: Record<string, ComponentType> = {
   YinYangCanvas: dynamic(() => import('@/components/experiments/YinYangCanvas')),
-} as const;
+};
 
-export default function ProjectArtifact({ project }: { project: any }) {
+export default function ProjectArtifact({ project }: { project: ProjectArtifactData }) {
   const CustomComponent = project.customComponent
-    ? customArtifactComponents[project.customComponent as keyof typeof customArtifactComponents]
+    ? customArtifactComponents[project.customComponent]
     : null;
 
   return (

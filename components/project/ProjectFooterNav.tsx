@@ -1,12 +1,17 @@
 import Link from 'next/link';
 
+type ProjectNavItem = Record<string, unknown> & {
+  name: string;
+  slug: string;
+};
+
 export default function ProjectFooterNav({
   prev,
   next,
   collection,
 }: {
-  prev: any;
-  next: any;
+  prev: ProjectNavItem | null;
+  next: ProjectNavItem | null;
   collection: 'experiments' | 'projects';
 }) {
   const collectionHref = `/${collection}`;

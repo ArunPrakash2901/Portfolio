@@ -1,4 +1,10 @@
-export default function ProjectStory({ project }: { project: any }) {
+type ProjectStoryData = Record<string, unknown> & {
+  differently: string;
+  hard: string;
+  why: string;
+};
+
+export default function ProjectStory({ project }: { project: ProjectStoryData }) {
   const sections = [
     { label: "WHY IT EXISTS", content: project.why, id: "why" },
     { label: "WHAT WAS HARD", content: project.hard, id: "hard" },

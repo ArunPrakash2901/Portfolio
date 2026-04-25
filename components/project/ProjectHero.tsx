@@ -1,14 +1,28 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import type { ComponentType } from 'react';
 
-const customArtifactComponents = {
-} as const;
+type ProjectHeroData = Record<string, unknown> & {
+  blogUrl?: string;
+  builtDate?: string;
+  customComponent?: string;
+  githubUrl?: string;
+  linkedInPostUrl?: string;
+  liveUrl?: string;
+  media?: string;
+  mediaMode?: string;
+  name: string;
+  oneLiner: string;
+  stack: string[];
+  status: string;
+};
 
-export default function ProjectHero({ project }: { project: any }) {
+const customArtifactComponents: Record<string, ComponentType> = {};
+
+export default function ProjectHero({ project }: { project: ProjectHeroData }) {
   const CustomComponent = project.customComponent
-    ? customArtifactComponents[project.customComponent as keyof typeof customArtifactComponents]
+    ? customArtifactComponents[project.customComponent]
     : null;
 
   return (
@@ -102,10 +116,7 @@ export default function ProjectHero({ project }: { project: any }) {
             <div className="relative aspect-square md:aspect-video overflow-hidden rounded-[1.25rem] border border-stone-200/80 bg-white">
               {CustomComponent ? (
                 <div className="h-full w-full">
-                  {(() => {
-                    const Component = CustomComponent as any;
-                    return <Component />;
-                  })()}
+                  <CustomComponent />
                 </div>
               ) : project.media ? (
                 <div className="relative h-full w-full">
