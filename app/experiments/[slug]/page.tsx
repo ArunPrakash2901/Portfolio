@@ -23,10 +23,7 @@ async function getExperiments() {
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
   const experiments = await Promise.all(
     files.map(async (file) => {
-      const contentModule = await import(
-        /* webpackExclude: /\.mdx$/ */
-        `@/content/experiments/${file.replace('.ts', '')}`
-      );
+      const contentModule = await import(`@/content/experiments/${file}`);
       return contentModule.default;
     })
   );

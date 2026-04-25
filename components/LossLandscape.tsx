@@ -1,6 +1,12 @@
 'use client';
 
-import { contours, type ContourMultiPolygon } from 'd3-contour';
+import {
+  contours,
+  type ContourMultiPolygon,
+  type ContourPolygon,
+  type ContourRing,
+  type ContourPoint,
+} from 'd3-contour';
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react';
 
 type LossLandscapeProps = {
@@ -71,11 +77,14 @@ const RIDGE_SEEDS = createRidgeSeeds(7, 4129);
 
 function contourToPath(contour: ContourMultiPolygon): string {
   return contour.coordinates
-    .map((polygon) =>
+    .map((polygon: ContourPolygon) =>
       polygon
-        .map((ring) =>
+        .map((ring: ContourRing) =>
           ring
-            .map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x.toFixed(3)} ${y.toFixed(3)}`)
+            .map(
+              ([x, y]: ContourPoint, index: number) =>
+                `${index === 0 ? 'M' : 'L'} ${x.toFixed(3)} ${y.toFixed(3)}`
+            )
             .join(' ') + ' Z'
         )
         .join(' ')
@@ -143,12 +152,12 @@ export default function LossLandscape({ className }: LossLandscapeProps) {
     const generatedContours = contourGenerator(grid);
 
     return generatedContours
-      .map((contour, index) => ({
+      .map((contour: ContourMultiPolygon, index: number) => ({
         d: contourToPath(contour),
         opacity: 0.08 + index * 0.018,
         strokeWidth: index % 2 === 0 ? 0.08 : 0.06,
       }))
-      .filter((contour) => contour.d.length > 0);
+      .filter((contour: ContourPath) => contour.d.length > 0);
   }, [contourGenerator, grid]);
 
   useEffect(() => {

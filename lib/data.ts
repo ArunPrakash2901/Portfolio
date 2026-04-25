@@ -6,11 +6,8 @@ export async function getProjects() {
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
   const projects = await Promise.all(
     files.map(async (file) => {
-      const module = await import(
-        /* webpackExclude: /\.mdx$/ */
-        `@/content/projects/${file.replace('.ts', '')}`
-      );
-      return module.default;
+      const contentModule = await import(`@/content/projects/${file}`);
+      return contentModule.default;
     })
   );
   return projects;
@@ -21,8 +18,8 @@ export async function getExperiments() {
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.ts'));
   const experiments = await Promise.all(
     files.map(async (file) => {
-      const module = await import(`@/content/experiments/${file.replace('.ts', '')}`);
-      return module.default;
+      const contentModule = await import(`@/content/experiments/${file}`);
+      return contentModule.default;
     })
   );
   return experiments;
