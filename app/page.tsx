@@ -44,8 +44,6 @@ function LiveTelemetryFallback() {
   );
 }
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = buildMetadata({
   title: { absolute: SITE_TITLE },
   description: SITE_DESCRIPTION,
