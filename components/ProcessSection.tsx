@@ -13,7 +13,7 @@ const STEPS = [
     bgColor: '#F7F4EF',
     textColor: '#1A1814',
     accentColor: '#9B8B6E',
-    img: '/images/process-01.png' 
+    img: '/images/process-01.webp' 
   },
   {
     num: '02',
@@ -23,7 +23,7 @@ const STEPS = [
     bgColor: '#E2E8F0',
     textColor: '#0F172A',
     accentColor: '#64748B',
-    img: '/images/process-02.png'
+    img: '/images/process-02.webp'
   },
   {
     num: '03',
@@ -33,7 +33,7 @@ const STEPS = [
     bgColor: '#2D3748', // Mid-Tone Slate
     textColor: '#F8FAFC',
     accentColor: '#4A5568', // Darker Slate Accent
-    img: '/images/process-03.png'
+    img: '/images/process-03.webp'
   },
   {
     num: '04',
@@ -43,7 +43,7 @@ const STEPS = [
     bgColor: '#FAF7ED',
     textColor: '#1A1814',
     accentColor: '#B45309',
-    img: '/images/process-04.png'
+    img: '/images/process-04.webp'
   }
 ];
 
