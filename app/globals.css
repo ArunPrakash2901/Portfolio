@@ -64,6 +64,28 @@ h1, h2, h3, h4, h5, h6 {
   animation: pulse-wave 2.5s ease-in-out infinite;
 }
 
+.terminal-label {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 8ch;
+  animation: terminal-type 4.8s steps(8, end) infinite;
+}
+
+@keyframes terminal-type {
+  0%, 10% {
+    width: 0ch;
+  }
+
+  45%, 55% {
+    width: 8ch;
+  }
+
+  90%, 100% {
+    width: 0ch;
+  }
+}
+
 /* Minimalist MDX Code Block Overrides */
 figure[data-rehype-pretty-code-figure] {
   @apply my-6 rounded-lg border border-[#D4C9B8] bg-[#F7F4EF] overflow-hidden;
@@ -91,5 +113,15 @@ figure[data-rehype-pretty-code-figure] code span {
   .mask-scrolly {
     mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ping { animation: none; }
+  .animate-pulse { animation: none; }
+  [class*="animate-"] { animation: none !important; }
+  .animate-\[ticker_28s_linear_infinite\] {
+    animation-duration: 0s !important;
+    animation-play-state: paused !important;
   }
 }

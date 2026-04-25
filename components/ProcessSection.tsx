@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion, useScroll, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
@@ -49,6 +50,9 @@ const STEPS = [
 export default function ProcessSection() {
   const [activeStep, setActiveStep] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -80,18 +84,18 @@ export default function ProcessSection() {
 
   return (
     <motion.section 
-      className="relative transition-colors duration-1000 ease-in-out"
+      className={`relative ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
       style={{ backgroundColor: STEPS[activeStep].bgColor }}
     >
       <div className="p-8 md:p-12 md:pb-8">
         <h2 
-          className="font-serif text-[28px] md:text-[36px] m-0 transition-colors duration-700"
+          className={`font-serif text-[28px] md:text-[36px] m-0 ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
           style={{ color: STEPS[activeStep].textColor }}
         >
           How I deal with data problems
         </h2>
         <p 
-          className="text-[12px] md:text-[14px] italic mt-1 transition-colors duration-700"
+          className={`text-[12px] md:text-[14px] italic mt-1 ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
           style={{ color: STEPS[activeStep].textColor, opacity: 0.7 }}
         >
           my approach to thinking, modeling, and delivering
@@ -103,18 +107,23 @@ export default function ProcessSection() {
         {/* Visual Side: Sticky Images with Asymmetric Masking */}
         <div className="md:w-1/2 h-[35vh] md:h-screen sticky top-0 flex items-center justify-center overflow-hidden order-1 md:order-2 z-10">
            <div className="mask-scrolly relative w-full h-full">
-             <AnimatePresence mode="wait">
-               <motion.div
-                 key={activeStep}
-                 initial={{ opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
-                 animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                 exit={{ opacity: 0, scale: 0.98, filter: 'blur(2px)' }}
-                 transition={{ duration: 0.25, ease: "easeOut" }}
-                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                 style={{ 
-                    backgroundImage: `url(${STEPS[activeStep].img})`,
-                 }}
-               />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStep}
+                  initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.02, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={prefersReducedMotion ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0, scale: 0.98, filter: 'blur(2px)' }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.25, ease: "easeOut" }}
+                  className="absolute inset-0"
+                >
+                 <Image
+                   src={STEPS[activeStep].img}
+                   alt=""
+                   fill
+                   sizes="(max-width: 768px) 100vw, 50vw"
+                   className="object-cover"
+                 />
+               </motion.div>
              </AnimatePresence>
            </div>
         </div>
@@ -127,25 +136,25 @@ export default function ProcessSection() {
               className="min-h-[60vh] md:min-h-screen flex flex-col justify-center p-8 md:p-24 py-12 md:py-0"
             >
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ margin: "-30% 0px -30% 0px" }}
-                transition={{ duration: 0.6 }}
+                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.6 }}
               >
                 <div 
-                  className="font-serif text-[80px] md:text-[120px] leading-none mb-2 md:mb-4 transition-colors duration-700"
+                  className={`font-serif text-[80px] md:text-[120px] leading-none mb-2 md:mb-4 ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
                   style={{ color: step.accentColor, opacity: 0.15 }}
                 >
                   {step.num}
                 </div>
                 <h3 
-                  className="font-serif text-[32px] md:text-[42px] mb-6 md:mb-8 leading-[1.1] transition-colors duration-700"
+                  className={`font-serif text-[32px] md:text-[42px] mb-6 md:mb-8 leading-[1.1] ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
                   style={{ color: step.textColor }}
                 >
                   {step.title}
                 </h3>
                 <div 
-                  className="text-[18px] md:text-[20px] leading-[1.6] max-w-[440px] transition-colors duration-700"
+                  className={`text-[18px] md:text-[20px] leading-[1.6] max-w-[440px] ${prefersReducedMotion ? '' : 'transition-all duration-300'}`}
                   style={{ color: step.textColor, opacity: 0.8 }}
                 >
                   {step.desc} 

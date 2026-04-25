@@ -1,11 +1,13 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import MusicRedirectModal from './MusicRedirectModal';
 
 const NAV_SECTIONS = ['hero', 'projects', 'built-for-fun', 'blog'] as const;
 type Section = (typeof NAV_SECTIONS)[number];
+
+const MusicRedirectModal = dynamic(() => import('./MusicRedirectModal'));
 
 interface NavBarProps {
   onContactClick: () => void;
@@ -14,8 +16,9 @@ interface NavBarProps {
 export default function NavBar({ onContactClick }: NavBarProps) {
   const [activeSection, setActiveSection] = useState<Section | null>(null);
   const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
-  const [typedLabel, setTypedLabel] = useState('');
-  const [isDeletingLabel, setIsDeletingLabel] = useState(false);
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const terminalLabel = '~/arun-k';
 
@@ -45,59 +48,32 @@ export default function NavBar({ onContactClick }: NavBarProps) {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  useEffect(() => {
-    const atFullLabel = typedLabel === terminalLabel;
-    const atEmptyLabel = typedLabel.length === 0;
-
-    const timeout = window.setTimeout(
-      () => {
-        if (!isDeletingLabel) {
-          if (atFullLabel) {
-            setIsDeletingLabel(true);
-            return;
-          }
-
-          setTypedLabel(terminalLabel.slice(0, typedLabel.length + 1));
-          return;
-        }
-
-        if (atEmptyLabel) {
-          setIsDeletingLabel(false);
-          return;
-        }
-
-        setTypedLabel(terminalLabel.slice(0, typedLabel.length - 1));
-      },
-      atFullLabel ? 1200 : isDeletingLabel ? 90 : 140
-    );
-
-    return () => window.clearTimeout(timeout);
-  }, [isDeletingLabel, terminalLabel, typedLabel]);
-
   const linkClass = (section: Section) =>
-    `text-[13px] transition-colors ${
+    `text-[13px] ${prefersReducedMotion ? '' : 'transition-colors'} ${
       activeSection === section
         ? 'text-[#1A1814] font-medium underline decoration-[1px] underline-offset-4'
         : 'text-[#5A5650] hover:text-[#1A1814]'
     }`;
 
-  const ctaClass = "text-[12px] text-[#1A1814] border-[0.5px] border-[#556E74] px-4 py-1.5 rounded-full font-medium hover:bg-[#2F6B75] hover:text-[#F7F4EF] transition-colors cursor-pointer";
+  const ctaClass = `text-[12px] text-[#1A1814] border-[0.5px] border-[#556E74] px-4 py-1.5 rounded-full font-medium hover:bg-[#2F6B75] hover:text-[#F7F4EF] ${prefersReducedMotion ? '' : 'transition-all duration-300'} cursor-pointer`;
 
   return (
     <div className="sticky top-0 z-50 bg-[#F7F4EF] rounded-t-xl">
-      <MusicRedirectModal
-        isOpen={isMusicModalOpen}
-        onClose={() => setIsMusicModalOpen(false)}
-        instaUrl="https://www.instagram.com/arun_prakash_007"
-      />
+      {isMusicModalOpen ? (
+        <MusicRedirectModal
+          isOpen={isMusicModalOpen}
+          onClose={() => setIsMusicModalOpen(false)}
+          instaUrl="https://www.instagram.com/arun_prakash_007"
+        />
+      ) : null}
       <header className="flex items-center justify-between px-8 py-4 border-b-[0.5px] border-[#E0DAD0]">
         <Link
           href="/#hero"
           aria-label={terminalLabel}
-          className={`inline-flex min-w-[10ch] items-center font-mono text-base transition-colors ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}
+          className={`inline-flex min-w-[10ch] items-center font-mono text-base ${prefersReducedMotion ? '' : 'transition-all duration-300'} ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}
         >
-          <span>{typedLabel}</span>
-          <span className="ml-0.5 inline-block h-[1em] w-[1.5px] animate-pulse bg-current" aria-hidden="true" />
+          <span className={prefersReducedMotion ? '' : 'terminal-label'}>{terminalLabel}</span>
+          <span className={`ml-0.5 inline-block h-[1em] w-[1.5px] ${prefersReducedMotion ? '' : 'animate-pulse'} bg-current`} aria-hidden="true" />
         </Link>
         <nav className="flex items-center gap-7">
           <Link href="/#projects" className={linkClass('projects')}>

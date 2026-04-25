@@ -175,6 +175,7 @@ export default async function LiveTelemetry() {
       href={activity.url}
       target="_blank"
       rel="noreferrer"
+      aria-label={`Latest commit: ${activity.repo} ${activity.message}, opens in new tab`}
       className="group mt-8 inline-flex max-w-full items-center gap-3 rounded-full border border-stone-800 bg-stone-900 px-1.5 py-1.5 pr-4 text-xs text-stone-300 shadow-sm transition-all hover:border-stone-700 hover:bg-stone-800/80"
     >
       <div className="flex items-center gap-2 rounded-full bg-stone-800 px-3 py-1">
@@ -207,6 +208,7 @@ export default async function LiveTelemetry() {
           {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
         </span>
       </div>
+      <span className="sr-only"> (opens in new tab)</span>
     </a>
   );
 }
