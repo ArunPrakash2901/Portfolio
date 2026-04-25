@@ -37,7 +37,7 @@ export default function BuiltForFunList({ experiments }: { experiments: Experime
                 {project.name}
               </span>
               <div className="flex items-center gap-4">
-                <span className="text-[13px] text-[#9B8B6E] w-12 shrink-0">
+                <span className="text-[13px] text-[#556E74] w-12 shrink-0">
                   {getYear(project.builtDate)}
                 </span>
                 <div className="flex gap-2 flex-wrap">
@@ -55,7 +55,7 @@ export default function BuiltForFunList({ experiments }: { experiments: Experime
             <div className="ml-4">
                <motion.span 
                  animate={{ rotate: expandedIndex === index ? 45 : 0 }}
-                 className="text-[#9B8B6E] text-xl inline-block"
+                 className="text-[#2F6B75] text-xl inline-block"
                >
                  +
                </motion.span>

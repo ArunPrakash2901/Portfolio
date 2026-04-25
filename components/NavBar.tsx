@@ -14,6 +14,10 @@ interface NavBarProps {
 export default function NavBar({ onContactClick }: NavBarProps) {
   const [activeSection, setActiveSection] = useState<Section | null>(null);
   const [isMusicModalOpen, setIsMusicModalOpen] = useState(false);
+  const [typedLabel, setTypedLabel] = useState('');
+  const [isDeletingLabel, setIsDeletingLabel] = useState(false);
+
+  const terminalLabel = '~/arun-k';
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -41,6 +45,35 @@ export default function NavBar({ onContactClick }: NavBarProps) {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
+  useEffect(() => {
+    const atFullLabel = typedLabel === terminalLabel;
+    const atEmptyLabel = typedLabel.length === 0;
+
+    const timeout = window.setTimeout(
+      () => {
+        if (!isDeletingLabel) {
+          if (atFullLabel) {
+            setIsDeletingLabel(true);
+            return;
+          }
+
+          setTypedLabel(terminalLabel.slice(0, typedLabel.length + 1));
+          return;
+        }
+
+        if (atEmptyLabel) {
+          setIsDeletingLabel(false);
+          return;
+        }
+
+        setTypedLabel(terminalLabel.slice(0, typedLabel.length - 1));
+      },
+      atFullLabel ? 1200 : isDeletingLabel ? 90 : 140
+    );
+
+    return () => window.clearTimeout(timeout);
+  }, [isDeletingLabel, terminalLabel, typedLabel]);
+
   const linkClass = (section: Section) =>
     `text-[13px] transition-colors ${
       activeSection === section
@@ -48,7 +81,7 @@ export default function NavBar({ onContactClick }: NavBarProps) {
         : 'text-[#5A5650] hover:text-[#1A1814]'
     }`;
 
-  const ctaClass = "text-[12px] text-[#1A1814] border-[0.5px] border-[#1A1814] px-4 py-1.5 rounded-full font-medium hover:bg-[#1A1814] hover:text-[#F7F4EF] transition-colors cursor-pointer";
+  const ctaClass = "text-[12px] text-[#1A1814] border-[0.5px] border-[#556E74] px-4 py-1.5 rounded-full font-medium hover:bg-[#2F6B75] hover:text-[#F7F4EF] transition-colors cursor-pointer";
 
   return (
     <div className="sticky top-0 z-50 bg-[#F7F4EF] rounded-t-xl">
@@ -58,8 +91,13 @@ export default function NavBar({ onContactClick }: NavBarProps) {
         instaUrl="https://www.instagram.com/arun_prakash_007"
       />
       <header className="flex items-center justify-between px-8 py-4 border-b-[0.5px] border-[#E0DAD0]">
-        <Link href="/#hero" className={`font-serif text-base transition-colors ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}>
-          ~/arun-k
+        <Link
+          href="/#hero"
+          aria-label={terminalLabel}
+          className={`inline-flex min-w-[10ch] items-center font-mono text-base transition-colors ${activeSection === 'hero' ? 'text-[#1A1814] font-bold' : 'text-[#1A1814]'}`}
+        >
+          <span>{typedLabel}</span>
+          <span className="ml-0.5 inline-block h-[1em] w-[1.5px] animate-pulse bg-current" aria-hidden="true" />
         </Link>
         <nav className="flex items-center gap-7">
           <Link href="/#projects" className={linkClass('projects')}>

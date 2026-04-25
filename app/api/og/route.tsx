@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
                   fontWeight: 500,
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: '#9B8B6E',
+                  color: '#556E74',
                   border: '1px solid #D4C9B8',
                   padding: '5px 16px',
                   borderRadius: '100px',

@@ -25,7 +25,7 @@ export default function CompassHeader() {
           <div className="relative" ref={popoverRef}>
             <button
               onClick={() => setIsOpen(prev => !prev)}
-              className="group flex items-center justify-center w-5 h-5 rounded-full border border-[#D4C9B8] text-[#9B8B6E] hover:border-[#1A1814] hover:text-[#1A1814] transition-all"
+              className="group flex items-center justify-center w-5 h-5 rounded-full border border-[#556E74] text-[#2F6B75] hover:border-[#1A1814] hover:text-[#1A1814] transition-all"
               aria-label="How to read this chart"
               aria-expanded={isOpen}
             >
@@ -74,7 +74,7 @@ export default function CompassHeader() {
                       gap: '8px',
                       alignItems: 'flex-start'
                     }}>
-                      <span style={{ color: '#9B8B6E', flexShrink: 0 }}>·</span>
+                      <span style={{ color: '#556E74', flexShrink: 0 }}>·</span>
                       {line}
                     </li>
                   ))}
@@ -83,7 +83,7 @@ export default function CompassHeader() {
             )}
           </div>
         </div>
-        <p className="text-[12px] text-[#9B8B6E] italic mt-1">honest, self-assessed · hover each axis for breakdown</p>
+        <p className="text-[12px] text-[#556E74] italic mt-1">honest, self-assessed · hover each axis for breakdown</p>
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ export default function RadarChart({ data }: RadarChartProps) {
         }
         curve="linearClosed"
         borderWidth={1.5}
-        borderColor="#9B8B6E"
+        borderColor="#2F6B75"
         gridLevels={5}
         gridShape="circular"
         gridLabelOffset={isMobile ? 12 : 24}
@@ -45,9 +45,9 @@ export default function RadarChart({ data }: RadarChartProps) {
         dotSize={4}
         dotColor="#F7F4EF"
         dotBorderWidth={1.5}
-        dotBorderColor="#9B8B6E"
+        dotBorderColor="#2F6B75"
         enableDotLabel={false}
-        colors={['#9B8B6E']}
+        colors={['#2F6B75']}
         fillOpacity={0.18}
         blendMode="normal"
         animate={true}
@@ -72,7 +72,7 @@ export default function RadarChart({ data }: RadarChartProps) {
           return (
             <div className="bg-[#EFEBE3] border-[0.5px] border-[#D4C9B8] p-4 flex flex-col gap-2 min-w-[200px] font-sans shadow-lg rounded-md relative z-50">
               <div className="flex justify-between items-center border-b-[0.5px] border-[#D4C9B8] pb-2 mb-1">
-                <span className="text-[#9B8B6E] text-[10px] font-medium uppercase tracking-widest">{item.competency}</span>
+                <span className="text-[#2F6B75] text-[10px] font-medium uppercase tracking-widest">{item.competency}</span>
                 <span className="text-[#1A1814] font-serif tracking-tight font-medium text-lg">
                   {item.score}
                 </span>
@@ -83,14 +83,14 @@ export default function RadarChart({ data }: RadarChartProps) {
                   <span className="text-[#5A5650] text-[9px] uppercase tracking-widest">Contributing Evidence:</span>
                   <ul className="flex flex-col gap-1">
                     {projects.map((p: string, i: number) => (
-                      <li key={i} className="text-[#1A1814] text-xs font-medium truncate before:content-['>'] before:mr-2 before:text-[#9B8B6E]">
+                      <li key={i} className="text-[#1A1814] text-xs font-medium truncate before:content-['>'] before:mr-2 before:text-[#2F6B75]">
                         {p}
                       </li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <div className="text-[#9B8B6E] text-xs italic mt-1">No contributing sets mapped.</div>
+                <div className="text-[#2F6B75] text-xs italic mt-1">No contributing sets mapped.</div>
               )}
             </div>
           );
