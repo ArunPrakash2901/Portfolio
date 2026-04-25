@@ -1,15 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import NavBar from '@/components/NavBar';
 import ContactModal from '@/components/ContactModal';
 import Link from 'next/link';
+import LossLandscape from '@/components/LossLandscape';
+import { isAmbientBackgroundRoute } from '@/lib/ambientRoute';
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const pathname = usePathname();
+  const showAmbientBackground = isAmbientBackgroundRoute(pathname);
 
-  return (
-    <div className="bg-[#F7F4EF] rounded-xl border-[0.5px] border-[#E0DAD0] flex flex-col overflow-visible max-w-[1400px] w-full mx-auto shadow-sm relative">
+  const shellContent = (
+    <div className="relative z-10 rounded-xl border-[0.5px] border-[#E0DAD0] flex flex-col overflow-visible max-w-[1400px] w-full mx-auto shadow-sm bg-transparent">
       <NavBar onContactClick={() => setIsContactOpen(true)} />
 
       {children}
@@ -24,7 +29,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </div>
         <button 
           onClick={() => setIsContactOpen(true)}
-          className="text-[13px] text-[#F7F4EF] border-[0.5px] border-[#5A5650] px-5 py-2 rounded-full hover:bg-white/10 transition-colors"
+          className="text-[13px] text-[#F7F4EF] border-[0.5px] border-[#556E74] px-5 py-2 rounded-full hover:bg-white/10 transition-colors"
         >
           Get in touch →
         </button>
@@ -32,5 +37,16 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </div>
+  );
+
+  if (!showAmbientBackground) {
+    return shellContent;
+  }
+
+  return (
+    <>
+      <LossLandscape />
+      {shellContent}
+    </>
   );
 }

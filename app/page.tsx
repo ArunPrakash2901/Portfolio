@@ -7,6 +7,7 @@ import Image from 'next/image';
 import LiveTelemetry from '@/components/LiveTelemetry';
 import ProcessSection from '@/components/ProcessSection';
 import BuiltForFunList from '@/components/BuiltForFunList';
+import LossLandscape from '@/components/LossLandscape'; 
 import Link from 'next/link';
 import { getProjects, getExperiments } from '@/lib/data';
 
@@ -40,6 +41,7 @@ export default async function Home() {
 
   return (
     <main className="w-full flex-1 flex flex-col">
+      <LossLandscape className="fixed inset-0 z-0 w-full h-full pointer-events-none" />
       
       {/* Ticker Section */}
       <div className="bg-[#1A1814] overflow-hidden py-[9px] border-b-[0.5px] border-[#2E2A25]">
@@ -47,7 +49,7 @@ export default async function Home() {
           {[...Array(2)].map((_, i) => (
             <div key={i} className="contents">
               {tickerItems.map((item, idx) => (
-                <span key={idx} className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#9B8B6E] tracking-[0.04em]">
+                <span key={idx} className="inline-flex items-center gap-2.5 px-7 text-[11px] text-[#D4C9B8] tracking-[0.04em]">
                   <span className="w-1 h-1 rounded-full bg-[#5A5650] shrink-0"></span>
                   {item.label} <span className="text-[#D4C9B8] font-medium">{item.value}</span>
                 </span>
@@ -60,7 +62,7 @@ export default async function Home() {
       {/* Hero Section */}
       <section id="hero" className="grid grid-cols-1 md:grid-cols-2 min-h-[360px] bg-[#F7F4EF]">
         <div className="p-8 md:p-11 flex flex-col justify-center gap-[18px]">
-          <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#9B8B6E]">Data Professional · Melbourne</span>
+          <span className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#556E74]">Data Professional · Melbourne</span>
           <h1 className="font-serif text-[42px] leading-[1.1] text-[#1A1814] m-0">Arun Krishnasamy</h1>
           <p className="text-[17px] text-[#5A5650] leading-[1.6] max-w-[440px] m-0">I&apos;m at the beginning of my story in data; but I show up curious, I stay until it makes sense, and I let the numbers do the talking.</p>
           <LiveTelemetry />
@@ -104,10 +106,10 @@ export default async function Home() {
               <div key={i} className="flex flex-col gap-1.5">
                  <div className="flex justify-between">
                    <span className="text-[12px] font-medium text-[#1A1814]">{axis.competency}</span>
-                   <span className="text-[11px] text-[#9B8B6E]">{axis.score}%</span>
+                   <span className="text-[11px] text-[#556E74]">{axis.score}%</span>
                  </div>
                  <div className="h-[3px] bg-[#E0DAD0] rounded-full overflow-hidden w-full">
-                    <div className="h-full bg-[#9B8B6E] rounded-full transition-all duration-1000 ease-out" style={{ width: `${axis.score}%` }}></div>
+                    <div className="h-full bg-[#2F6B75] rounded-full transition-all duration-1000 ease-out" style={{ width: `${axis.score}%` }}></div>
                  </div>
               </div>
             ))}
@@ -121,23 +123,23 @@ export default async function Home() {
       <section className="bg-[#EFEBE3] p-8 md:p-12" id="projects">
         <div className="mb-4">
           <h2 className="font-serif text-[28px] text-[#1A1814] m-0">Projects</h2>
-          <p className="text-[12px] text-[#9B8B6E] italic mt-1">analyses, models, and case studies</p>
+          <p className="text-[12px] text-[#556E74] italic mt-1">analyses, models, and case studies</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-7">
           {workProjects.length > 0 ? workProjects.map(project => (
             <Link 
               key={project.slug} 
               href={`/projects/${project.slug}`}
-              className={`border-[0.5px] rounded-[10px] overflow-hidden group transition-all hover:shadow-lg ${project.status === 'Live' ? 'bg-[#F7F4EF] border-[#9B8B6E] border-[1.5px]' : 'bg-[#F7F4EF] border-[#D4C9B8]'}`}
+              className={`border-[0.5px] rounded-[10px] overflow-hidden group transition-all hover:shadow-lg ${project.status === 'Live' ? 'bg-[#F7F4EF] border-[#2F6B75] border-[1.5px]' : 'bg-[#F7F4EF] border-[#D4C9B8]'}`}
             >
               <div className="h-[86px] bg-[#E8E1D5] flex items-center justify-center relative overflow-hidden">
                 {project.media ? (
                   <Image src={project.media} alt={project.name} fill className="object-cover opacity-50 group-hover:opacity-100 transition-opacity" />
                 ) : (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 17l4-8 4 4 4-6 4 6" stroke="#9B8B6E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 17l4-8 4 4 4-6 4 6" stroke="#2F6B75" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 )}
                 {project.status === 'Live' && (
-                  <div className="absolute top-[22px] right-[40px] w-2 h-2 rounded-full bg-[#9B8B6E] border-[1.5px] border-[#F7F4EF] shadow-sm animate-pulse"></div>
+                  <div className="absolute top-[22px] right-[40px] w-2 h-2 rounded-full bg-[#2F6B75] border-[1.5px] border-[#F7F4EF] shadow-sm animate-pulse"></div>
                 )}
               </div>
               <div className="p-3.5 flex flex-col justify-start">
@@ -147,7 +149,7 @@ export default async function Home() {
                     Live · Interactive
                   </div>
                 )}
-                <div className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#9B8B6E] mb-[5px]">
+                <div className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#556E74] mb-[5px]">
                   {project.stack.slice(0, 2).join(' · ')}
                 </div>
                 <div className="font-serif text-[14px] text-[#1A1814] leading-[1.3] group-hover:underline">
@@ -156,7 +158,7 @@ export default async function Home() {
               </div>
             </Link>
           )) : (
-            <div className="text-[12px] italic text-[#9B8B6E]">No projects successfully compiled. Add Work marked entries to /content/projects/.</div>
+            <div className="text-[12px] italic text-[#556E74]">No projects successfully compiled. Add Work marked entries to /content/projects/.</div>
           )}
         </div>
       </section>
@@ -172,7 +174,7 @@ export default async function Home() {
       <section className="bg-[#F7F4EF] p-0" id="built-for-fun">
         <div className="p-8 md:p-12 pb-4">
           <h2 className="font-serif text-[28px] text-[#1A1814] m-0">Built for fun</h2>
-          <p className="text-[12px] text-[#9B8B6E] italic mt-1">experiments, tools, and things built for fun</p>
+          <p className="text-[12px] text-[#556E74] italic mt-1">experiments, tools, and things built for fun</p>
         </div>
         
         <BuiltForFunList experiments={experiments} />
@@ -184,23 +186,23 @@ export default async function Home() {
       <section className="bg-[#EFEBE3] p-8 md:p-12 mb-auto" id="blog">
         <div className="mb-7">
           <h2 className="font-serif text-[28px] text-[#1A1814] m-0">Blog</h2>
-          <p className="text-[12px] text-[#9B8B6E] italic mt-1">thinking out loud about data, statistics, and the craft</p>
+          <p className="text-[12px] text-[#556E74] italic mt-1">thinking out loud about data, statistics, and the craft</p>
         </div>
         
         <div className="flex flex-col border-t-[0.5px] border-[#D4C9B8]">
            {writingPosts.length > 0 ? writingPosts.map(post => (
              <div key={post.slug} className="flex justify-between items-center py-[18px] border-b-[0.5px] border-[#D4C9B8] group cursor-pointer hover:bg-black/5 px-2 -mx-2 transition-colors rounded-sm">
                <div className="flex flex-col gap-1">
-                 <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#9B8B6E]">{post.domain[0]}</span>
+                 <span className="text-[10px] font-medium tracking-[0.08em] uppercase text-[#556E74]">{post.domain[0]}</span>
                  <span className="font-serif text-[16px] text-[#1A1814] group-hover:underline decoration-[0.5px] underline-offset-4">{post.title}</span>
                </div>
                <div className="flex flex-col items-end gap-1 shrink-0 ml-4">
-                 <span className="text-[11px] text-[#9B8B6E] text-right">{post.shortDate || '2026'}</span>
-                 <span className="text-[14px] text-[#9B8B6E] group-hover:translate-x-1 transition-transform">→</span>
+                 <span className="text-[11px] text-[#556E74] text-right">{post.shortDate || '2026'}</span>
+                 <span className="text-[14px] text-[#556E74] group-hover:translate-x-1 transition-transform">→</span>
                </div>
              </div>
            )) : (
-             <div className="py-4 text-[#9B8B6E] text-[12px] italic border-b-[0.5px] border-[#D4C9B8]">
+             <div className="py-4 text-[#556E74] text-[12px] italic border-b-[0.5px] border-[#D4C9B8]">
                No publishing history detected. Add raw `.mdx` files to `/content/projects` marked as "Writing".
              </div>
            )}
