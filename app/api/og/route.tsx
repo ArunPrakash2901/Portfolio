@@ -5,7 +5,7 @@ export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const title = searchParams.get('title') || 'John Doe';
+  const title = searchParams.get('title') || 'Arun Krishnasamy';
   const tag = searchParams.get('tag') || 'Data & AI Portfolio';
 
   // Fetch DM Serif Display (400) and DM Sans (400) as ArrayBuffers for Satori rendering
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
                   fontWeight: 400,
                 }}
               >
-                John Doe · Data & AI Portfolio
+                Arun Krishnasamy · Data & AI Portfolio
               </span>
             </div>
           </div>
@@ -170,7 +170,7 @@ export async function GET(request: NextRequest) {
                 color: '#F7F4EF',
               }}
             >
-              johndoe.dev
+              arunk.dev
             </span>
             <div
               style={{
