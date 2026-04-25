@@ -23,9 +23,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
 
       {children}
 
-      <footer className="bg-[#0F0D0A] px-8 py-9 flex items-center justify-between">
+      <footer className="bg-[#0F0D0A] px-8 py-9 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <span className="font-serif text-lg text-[#F7F4EF]">Arun Krishnasamy</span>
-        <div className="flex gap-6">
+        <div className="flex gap-4 flex-wrap md:gap-6">
           <a href="https://www.linkedin.com/in/apkrishnasamy/" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">LinkedIn</a>
           <a href="https://github.com/ArunPrakash2901" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">GitHub</a>
           <a href="https://www.kaggle.com/lethargicmaster" target="_blank" rel="noreferrer" className="text-xs text-[#5A5650] hover:text-[#F7F4EF] transition-colors">Kaggle</a>
@@ -33,7 +33,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         </div>
         <button 
           onClick={() => setIsContactOpen(true)}
-          className="text-[13px] text-[#F7F4EF] border-[0.5px] border-[#556E74] px-5 py-2 rounded-full hover:bg-white/10 transition-colors"
+          className="text-[13px] text-[#F7F4EF] border-[0.5px] border-[#556E74] px-5 py-2 rounded-full hover:bg-white/10 transition-colors self-start md:self-auto"
         >
           Get in touch →
         </button>
