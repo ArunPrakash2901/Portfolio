@@ -54,10 +54,10 @@ export default defineConfig({
   collections: {
     projects: {
       name: 'Project',
-      pattern: 'projects/**/*.mdx',
+      pattern: 'posts/**/*.mdx',
       schema: s.object({
         title: s.string().max(99),
-        slug: s.path(), 
+        slug: s.path().transform(p => p.replace(/^posts\//, 'projects/')), 
         category: s.enum(["Work", "Sandbox", "Writing"]),
         date: s.isodate(),
         shortDate: s.string().optional(),
