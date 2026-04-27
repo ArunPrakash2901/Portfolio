@@ -1,4 +1,7 @@
 import { experiments as veliteExperiments, projects as veliteProjects, type Project } from '#velite';
+import bouncingBall from '@/content/experiments/bouncing-ball';
+import chess from '@/content/experiments/chess';
+import yinYang from '@/content/experiments/yinyang';
 
 export type PortfolioNote = string | { title: string; body: string };
 
@@ -21,6 +24,27 @@ export type PortfolioEntry = {
   notes: PortfolioNote[];
 };
 
+type ExperimentSource = {
+  slug: string;
+  name: string;
+  oneLiner: string;
+  title?: string;
+  summary?: string;
+  status?: string;
+  builtDate: string;
+  date?: string;
+  stack: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  linkedInPostUrl?: string;
+  media?: string;
+  why?: string;
+  hard?: string;
+  differently?: string;
+  notes?: PortfolioNote[];
+  code?: string;
+};
+
 function mapProjectToEntry(project: Project): PortfolioEntry {
   return {
     slug: project.slug.replace('projects/', ''),
@@ -41,6 +65,28 @@ function mapProjectToEntry(project: Project): PortfolioEntry {
   };
 }
 
+const experimentSources: ExperimentSource[] = [bouncingBall, yinYang, chess];
+const experimentEntries = experimentSources.map(mapExperimentToEntry);
+
+function mapExperimentToEntry(experiment: ExperimentSource): PortfolioEntry {
+  return {
+    slug: experiment.slug,
+    name: experiment.name,
+    oneLiner: experiment.oneLiner,
+    status: experiment.status || 'Experimental',
+    builtDate: experiment.builtDate,
+    stack: experiment.stack,
+    githubUrl: experiment.githubUrl,
+    liveUrl: experiment.liveUrl,
+    linkedInPostUrl: experiment.linkedInPostUrl,
+    media: experiment.media,
+    why: experiment.why || '',
+    hard: experiment.hard || '',
+    differently: experiment.differently || '',
+    notes: experiment.notes || [],
+  };
+}
+
 export async function getProjects(): Promise<PortfolioEntry[]> {
   return veliteProjects
     .filter((p) => p.category !== 'Writing')
@@ -48,21 +94,7 @@ export async function getProjects(): Promise<PortfolioEntry[]> {
 }
 
 export async function getExperiments(): Promise<PortfolioEntry[]> {
-  // Experiments are still primarily .ts files for now, or we can migrate them too.
-  // Given the performance goal, let's keep them as is or use velite if available.
-  return veliteExperiments.map((e) => ({
-    slug: e.slug.replace('experiments/', ''),
-    name: e.title,
-    oneLiner: e.summary,
-    status: 'Experimental',
-    builtDate: e.date.split('-').slice(0, 2).join('-'),
-    stack: [],
-    why: '',
-    hard: '',
-    differently: '',
-    notes: [],
-    media: '',
-  }));
+  return experimentEntries;
 }
 
 export async function getProjectBySlug(slug: string) {
@@ -71,8 +103,7 @@ export async function getProjectBySlug(slug: string) {
 }
 
 export async function getExperimentBySlug(slug: string) {
-  const experiments = await getExperiments();
-  return experiments.find((experiment) => experiment.slug === slug);
+  return experimentEntries.find((experiment) => experiment.slug === slug);
 }
 
 export function getProjectPostBySlug(slug: string) {
@@ -98,8 +129,11 @@ export function getExperimentPostBySlug(slug: string) {
 }
 
 export function getLatestContentDate() {
-  const timestamps = [...veliteProjects, ...veliteExperiments]
-    .map((entry) => Date.parse(entry.date))
+  const timestamps = [
+    ...veliteProjects.map((entry) => entry.date),
+    ...experimentSources.map((entry) => entry.date ?? entry.builtDate),
+  ]
+    .map((value) => Date.parse(value))
     .filter((value): value is number => Number.isFinite(value));
 
   return timestamps.length > 0 ? new Date(Math.max(...timestamps)) : new Date();
