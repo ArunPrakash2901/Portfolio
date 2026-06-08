@@ -3,7 +3,7 @@ title: "Goldstein Electorate Geospatial Analysis"
 category: "Sandbox"
 date: "2024-04-24"
 domain: ["Geospatial Analysis", "Electoral Data", "EDA"]
-techStack: ["R", "sf", "ggplot2", "dplyr", "readxl", "janitor"]
+techStack: ["R", "Data Wrangling", "geomsf", "ggplot2", "dplyr"]
 competencyScores:
   analytics_eda: 68
   statistical_reasoning: 38
@@ -20,12 +20,12 @@ builtDate: "2024-04"
 githubUrl: "https://github.com/ArunPrakash2901/Youth_employment_analysis"
 why: "I wanted to treat Goldstein as a map question rather than a table question, then see what changed once election results, Census structure, rent, income, and referendum results were all aligned on the same Victorian geography."
 hard: "The tricky part was getting the AEC boundary layer and the ABS geography into the same spatial frame, then assigning small Census areas to electorates before averaging the rent and income measures."
-differently: "I would finish the missing Indigenous profile section, fix the Chisholm label typo, and add clean export steps so the map outputs do not depend on notebook cache files."
+differently: "I would finish the missing Indigenous profile section and add clean export steps so the map outputs do not depend on notebook cache files."
 notes:
   - "The core spatial workflow aligned the AEC boundaries with the ABS small-area geography, assigned each Census area to an electorate, and then rolled rent and income up to division level."
   - "Using a cropped inner-Melbourne view did more analytical work than the full-state map because it made the local rent pattern around Goldstein readable straight away."
   - "The demographic comparison added context to the maps by placing Goldstein next to Victoria rather than treating it as a standalone profile."
-  - "The unfinished edges were useful too: the Indigenous profile section never landed, one geography package was only a pointer file, and the map labels still carried a typo for Chisholm."
+  - "The unfinished edges were useful too: the Indigenous profile section never landed, one geography package was only a pointer file."
 ---
 
 # Goldstein Electorate Geospatial Analysis
@@ -77,4 +77,4 @@ The referendum slice stayed narrow and concrete: Goldstein's Yes vote share was 
 
 ### What's Next
 
-The next step is to finish the parts that were only sketched: bring in the missing Indigenous profile data, fix the mislabeled Chisholm electorate, and add explicit export steps instead of relying on notebook-rendered images. I would also like to compare the current small-area aggregation against the ready-made electorate layer that already ships with the ABS geography package, then turn the cropped Melbourne maps into an interactive view so the local pattern can be read electorate by electorate.
+The next step is to finish the parts that were only sketched: bring in the missing Indigenous profile data, and add explicit export steps instead of relying on notebook-rendered images. I would also like to compare the current small-area aggregation against the ready-made electorate layer that already ships with the ABS geography package, then turn the cropped Melbourne maps into an interactive view so the local pattern can be read electorate by electorate.
